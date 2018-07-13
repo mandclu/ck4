@@ -49,20 +49,18 @@
         var win = popup(url);
 
         window.addEventListener('message', function (e) {
-            var id = e.data.id;
-            var data = e.data.data;
             var mb = ev.sender.mediabrowser;
 
-            if (e.origin !== win.origin || id !== 'mediabrowser' || !data.src) {
+            if (e.origin !== win.origin || e.source !== win || !e.data.src) {
                 return;
             }
 
-            Object.getOwnPropertyNames(data).forEach(function (key) {
+            Object.getOwnPropertyNames(e.data).forEach(function (key) {
                 var t;
                 var target;
 
                 if (mb.hasOwnProperty(key) && (t = mb[key].split(':')) && t.length === 2 && !!(target = dialog.getContentElement(t[0], t[1]))) {
-                    target.setValue(data[key]);
+                    target.setValue(e.data[key]);
                 }
             });
         }, false);
