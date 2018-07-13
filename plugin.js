@@ -48,12 +48,11 @@
         window.addEventListener('message', function (e) {
             var id = e.data.id;
             var data = e.data.data;
-            var mb = ev.sender.mediabrowser
+            var mb = ev.sender.mediabrowser;
 
             if (e.origin !== win.origin || id !== 'mediabrowser' || !data.src) {
                 return;
             }
-
 
             Object.getOwnPropertyNames(data).forEach(function (key) {
                 var target;
