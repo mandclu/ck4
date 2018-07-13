@@ -1,6 +1,8 @@
 'use strict';
 
 (function (window, CKEDITOR) {
+    var container = ['hbox', 'vbox', 'fieldset'];
+
     CKEDITOR.plugins.add('mediabrowser', {});
 
     CKEDITOR.on('dialogDefinition', function (ev) {
@@ -33,7 +35,7 @@
     }
 
     function isContainer(item) {
-        return ['hbox', 'vbox', 'fieldset'].indexOf(item.type) >= 0 && item.children && item.children.length > 0;
+        return container.indexOf(item.type) >= 0 && item.children && item.children.length > 0;
     }
 
     function isMediabrowser(item) {
@@ -55,20 +57,20 @@
             }
 
             Object.getOwnPropertyNames(data).forEach(function (key) {
+                var t;
                 var target;
 
-                if (mb.hasOwnProperty(key) && (target = mb[key].split(':')) && target.length === 2) {
-                    dialog.getContentElement(target[0], target[1]).setValue(data[key]);
+                if (mb.hasOwnProperty(key) && (t = mb[key].split(':')) && t.length === 2 && !!(target = dialog.getContentElement(t[0], t[1]))) {
+                    target.setValue(data[key]);
                 }
             });
         }, false);
     }
 
     function popup(url) {
-        return window.open(
-            url,
-            'mediabrowser',
-            'location=no,menubar=no,toolbar=no,dependent=yes,minimizable=no,modal=yes,alwaysRaised=yes,resizable=yes,scrollbars=yes'
-        );
+        var features = 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
+            'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width;
+
+        return window.open(url, 'mediabrowser', features);
     }
 })(window, CKEDITOR);
