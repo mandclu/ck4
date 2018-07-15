@@ -2,24 +2,6 @@
 
 (function (window, CKEDITOR) {
     var container = ['hbox', 'vbox', 'fieldset'];
-    var types = {
-        aac: 'audio',
-        flac: 'audio',
-        gif: 'img',
-        jpeg: 'img',
-        jpg: 'img',
-        mp3: 'audio',
-        mp4: 'video',
-        oga: 'audio',
-        ogg: 'audio',
-        ogv: 'video',
-        png: 'img',
-        svg: 'img',
-        wav: 'audio',
-        weba: 'audio',
-        webm: 'video',
-        webp: 'img'
-    };
 
     CKEDITOR.plugins.add('mediabrowser', {});
 
@@ -73,8 +55,7 @@
             var mb = ev.sender.mediabrowser;
 
             if (!e.data.type) {
-                var ext = e.data.src.split('.').pop();
-                e.data.type = ext && types.hasOwnProperty(ext) ? types[ext] : '';
+                e.data.type = type(e.data.src);
             }
 
             Object.getOwnPropertyNames(e.data).forEach(function (key) {
@@ -93,5 +74,34 @@
             'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width;
 
         return window.open(url, 'mediabrowser', features);
+    }
+
+    function type(url) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('HEAD', url, false);
+        xhr.send();
+
+        if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+            var type = xhr.getResponseHeader('Content-Type');
+
+            if (type.indexOf('audio/') === 0) {
+                return 'audio';
+            }
+
+            if (type === 'text/html') {
+                return 'iframe';
+            }
+
+            if (type.indexOf('image/') === 0) {
+                return 'img';
+            }
+
+            if (type.indexOf('video/') === 0) {
+                return 'video';
+            }
+        }
+
+        return '';
     }
 })(window, CKEDITOR);
