@@ -17,7 +17,7 @@
                 findElements(def.contents[i].elements);
             }
         }
-    }, null, null, 1);
+    });
 
     function findElements(items) {
         if (!Array.isArray(items) || items.length <= 0) {
@@ -30,7 +30,6 @@
             } else if (isMediabrowser(item)) {
                 item.hidden = false;
                 item.onClick = onClick;
-                delete item.filebrowser;
             }
         });
     }
