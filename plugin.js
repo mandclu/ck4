@@ -3,19 +3,7 @@
 (function (window, CKEDITOR) {
     var container = ['hbox', 'vbox', 'fieldset'];
 
-    CKEDITOR.plugins.add('mediabrowser', {
-        init: function (editor) {
-            editor.ui.addButton('mediabrowser', {
-                label: 'Media Browser',
-                command: 'mediabrowser',
-                click: function (editor) {
-                    CKEDITOR.mediabrowser.open(editor.config.mediabrowserUrl, function (data) {
-                        console.log(data);
-                    });
-                }
-            });
-        }
-    });
+    CKEDITOR.plugins.add('mediabrowser', {});
 
     CKEDITOR.on('dialogDefinition', function (ev) {
         if (!ev.editor.plugins.mediabrowser || !ev.editor.config.mediabrowserUrl) {
