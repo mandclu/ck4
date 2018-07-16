@@ -78,44 +78,12 @@
                     return;
                 }
 
-                if (!ev.data.type) {
-                    ev.data.type = this.type(ev.data.src);
-                }
-
                 call(ev.data);
                 win.close();
             }, false);
         },
         popup: function (url) {
             return window.open(url, 'mediabrowser', this.popupFeatures);
-        },
-        type: function (url) {
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('HEAD', url, false);
-            xhr.send();
-
-            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-                var type = xhr.getResponseHeader('Content-Type');
-
-                if (type.indexOf('audio/') === 0) {
-                    return 'audio';
-                }
-
-                if (type === 'text/html') {
-                    return 'iframe';
-                }
-
-                if (type.indexOf('image/') === 0) {
-                    return 'img';
-                }
-
-                if (type.indexOf('video/') === 0) {
-                    return 'video';
-                }
-            }
-
-            return '';
         }
     };
 })(window, CKEDITOR);
