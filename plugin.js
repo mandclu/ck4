@@ -66,6 +66,7 @@
                     target.setValue(e.data[key]);
                 }
             });
+            win.close();
         }, false);
     }
 
