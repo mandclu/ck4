@@ -45,64 +45,77 @@
     function onClick(ev) {
         var dialog = ev.sender.getDialog();
         var url = dialog.getParentEditor().config.mediabrowserUrl;
-        var win = popup(url);
 
-        window.addEventListener('message', function (e) {
-            if (e.origin !== win.origin || e.source !== win || !e.data.src) {
-                return;
-            }
-
+        CKEDITOR.mediabrowser.open(url, function (data) {
             var mb = ev.sender.mediabrowser;
 
-            if (!e.data.type) {
-                e.data.type = type(e.data.src);
-            }
-
-            Object.getOwnPropertyNames(e.data).forEach(function (key) {
+            Object.getOwnPropertyNames(data).forEach(function (key) {
                 var t;
                 var target;
 
                 if (mb.hasOwnProperty(key) && (t = mb[key].split(':')) && t.length === 2 && !!(target = dialog.getContentElement(t[0], t[1]))) {
-                    target.setValue(e.data[key]);
+                    target.setValue(data[key]);
                 }
             });
-            win.close();
-        }, false);
+        });
     }
 
-    function popup(url) {
-        var features = 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
-            'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width;
-
-        return window.open(url, 'mediabrowser', features);
-    }
-
-    function type(url) {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open('HEAD', url, false);
-        xhr.send();
-
-        if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-            var type = xhr.getResponseHeader('Content-Type');
-
-            if (type.indexOf('audio/') === 0) {
-                return 'audio';
+    /**
+     * Public API
+     */
+    CKEDITOR.mediabrowser = {
+        popupFeatures: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
+            'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width,
+        open: function (url, call) {
+            if (!url || typeof call !== 'function') {
+                return;
             }
 
-            if (type === 'text/html') {
-                return 'iframe';
+            var win = this.popup(url);
+
+            window.addEventListener('message', function (ev) {
+                if (ev.origin !== win.origin || ev.source !== win || !ev.data.src) {
+                    return;
+                }
+
+                if (!ev.data.type) {
+                    ev.data.type = this.type(ev.data.src);
+                }
+
+                call(ev.data);
+                win.close();
+            }, false);
+        },
+        popup: function (url) {
+            return window.open(url, 'mediabrowser', this.popupFeatures);
+        },
+        type: function (url) {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('HEAD', url, false);
+            xhr.send();
+
+            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+                var type = xhr.getResponseHeader('Content-Type');
+
+                if (type.indexOf('audio/') === 0) {
+                    return 'audio';
+                }
+
+                if (type === 'text/html') {
+                    return 'iframe';
+                }
+
+                if (type.indexOf('image/') === 0) {
+                    return 'img';
+                }
+
+                if (type.indexOf('video/') === 0) {
+                    return 'video';
+                }
             }
 
-            if (type.indexOf('image/') === 0) {
-                return 'img';
-            }
-
-            if (type.indexOf('video/') === 0) {
-                return 'video';
-            }
+            return '';
         }
-
-        return '';
-    }
+    };
 })(window, CKEDITOR);
