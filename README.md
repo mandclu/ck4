@@ -20,7 +20,7 @@ You can implement your media browser as you wish, the only two requirements are 
 
     CKEDITOR.replace(document.getElementById('editor'), {
         ...
-        mediabrowserUrl: '/browser/index.html',
+        mediabrowserUrl: '/url/to/mediabrowser',
         ...
     })
 
@@ -28,5 +28,5 @@ and that your media browser notifies the editor by posting a message p.e. like
 
     window.opener.postMessage({
         alt: 'Optional alternative text',
-        src: '/url/to/media
+        src: '/url/to/media'
     }, window.opener.origin); 
