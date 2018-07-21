@@ -30,3 +30,5 @@ and that your media browser notifies the editor by posting a message p.e. like
         alt: 'Optional alternative text',
         src: '/url/to/media'
     }, window.opener.origin); 
+
+You can find a minimalistic media browser example @ https://github.com/akilli/rte/tree/master/browser
