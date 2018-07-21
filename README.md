@@ -4,7 +4,7 @@ This plugin provides a minimal media browser API as an alternative to the [fileb
 
 Unlike the [filebrowser add-on](https://ckeditor.com/cke4/addon/filebrowser) it does not use URL parameters to pass values between the editor and the browser windows, but uses the [window.postMessage()](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) function to communicate between both windows.
 
-Depending on the media plugin you use or rather the `mediabrowser` property of the _Browse server_ button of the its dialog, you can pass more than just the URL of the selected media from the media browser to the editor.
+Depending on the media plugin you use or rather the `mediabrowser` property of the _Browse server_ button of its dialog, you can pass more than just the URL of the selected media from the media browser to the editor.
 
     {
         id: 'browse',
