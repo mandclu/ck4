@@ -74,12 +74,10 @@
             var win = this.popup(url);
 
             window.addEventListener('message', function (ev) {
-                if (ev.origin !== win.origin || ev.source !== win || !ev.data.src) {
-                    return;
+                if (ev.origin === win.origin && ev.source === win && !!ev.data.src) {
+                    call(ev.data);
+                    win.close();
                 }
-
-                call(ev.data);
-                win.close();
             }, false);
         },
         popup: function (url) {
