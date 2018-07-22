@@ -77,7 +77,6 @@
             try {
                 origin = win.origin;
             } catch (e) {
-                window.console.log(e);
                 origin = this.getOrigin(url);
             }
 
