@@ -1,6 +1,6 @@
 'use strict';
 
-(function (window, CKEDITOR) {
+(function (document, window, CKEDITOR) {
     var container = ['hbox', 'vbox', 'fieldset'];
 
     CKEDITOR.plugins.add('mediabrowser', {});
@@ -72,9 +72,17 @@
             }
 
             var win = this.popup(url);
+            var origin;
+
+            try {
+                origin = win.origin;
+            } catch (e) {
+                window.console.log(e);
+                origin = this.getOrigin(url);
+            }
 
             window.addEventListener('message', function (ev) {
-                if (ev.origin === win.origin && ev.source === win && !!ev.data.src) {
+                if (ev.origin === origin && ev.source === win && !!ev.data.src) {
                     call(ev.data);
                     win.close();
                 }
@@ -82,6 +90,12 @@
         },
         popup: function (url) {
             return window.open(url, 'mediabrowser', this.popupFeatures);
+        },
+        getOrigin: function (url) {
+            var a = document.createElement('a');
+            a.href = url;
+
+            return a.origin;
         }
     };
-})(window, CKEDITOR);
+})(document, window, CKEDITOR);
