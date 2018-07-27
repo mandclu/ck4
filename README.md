@@ -1,6 +1,6 @@
 # Media Browser
 
-This plugin provides a minimal media browser API as an alternative to the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser). This plugin does not care about advanced features like file uploads, so stick with the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser) if you need those.
+This plugin provides a minimal media browser API as an alternative to the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser) and does not care about advanced features like file uploads, so stick with the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser) if you need those.
 
 Unlike the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser) it does not use URL parameters to pass values between the editor and the browser windows, but uses the [window.postMessage()](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) function to communicate between both windows. So you can pass more than just the URL of the selected media from the media browser to the editor or even multiple media elements at once. Currently the only media plugin that uses this API is the [Media Widget](https://ckeditor.com/cke4/addon/media).
 
