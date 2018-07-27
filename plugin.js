@@ -39,7 +39,7 @@
     }
 
     function isMediabrowser(item) {
-        return item.type === 'button' && item.mediabrowser && Object.getOwnPropertyNames(item.mediabrowser);
+        return item.type === 'button' && item.mediabrowser && typeof item.mediabrowser === 'function';
     }
 
     function onClick(ev) {
@@ -47,16 +47,7 @@
         var url = dialog.getParentEditor().config.mediabrowserUrl;
 
         CKEDITOR.mediabrowser.open(url, function (data) {
-            var mb = ev.sender.mediabrowser;
-
-            Object.getOwnPropertyNames(data).forEach(function (key) {
-                var t;
-                var target;
-
-                if (mb.hasOwnProperty(key) && (t = mb[key].split(':')) && t.length === 2 && !!(target = dialog.getContentElement(t[0], t[1]))) {
-                    target.setValue(data[key]);
-                }
-            });
+            ev.sender.mediabrowser.call(ev.sender, data);
         });
     }
 
@@ -66,8 +57,8 @@
     CKEDITOR.mediabrowser = {
         popupFeatures: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
             'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width,
-        open: function (url, call) {
-            if (!url || typeof call !== 'function') {
+        open: function (url, callback) {
+            if (!url || typeof callback !== 'function') {
                 return;
             }
 
@@ -82,8 +73,8 @@
             }
 
             window.addEventListener('message', function (ev) {
-                if (ev.origin === origin && ev.source === win && !!ev.data.src) {
-                    call(ev.data);
+                if (ev.origin === origin && ev.source === win) {
+                    callback(ev.data);
                     win.close();
                 }
             }, false);
