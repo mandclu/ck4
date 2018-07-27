@@ -25,7 +25,6 @@ If you wanna use the API in your plugin, you just have to define a callback func
                     dialog.getContentElement('info', item).setValue(data[item]);
                 }
             });
-
         }
     }
 
