@@ -6,7 +6,7 @@
         requires: 'widget',
         icons: 'detail',
         hidpi: true,
-        lang: 'de,en,uk',
+        lang: 'de,en,uk,ru',
         init: function (editor) {
             editor.widgets.add('detail', {
                 button: editor.lang.detail.title,
