@@ -66,7 +66,7 @@
             var origin;
 
             try {
-                origin = win.origin;
+                origin = win.origin || win.location.origin;
             } catch (e) {
                 console.log(e);
                 origin = this.getOrigin(url);
