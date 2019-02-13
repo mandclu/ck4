@@ -312,9 +312,10 @@
         },
         getUrl: function (url) {
             var a = document.createElement('a');
+            var origin = window.origin || window.location.origin;
             a.href = url;
 
-            return a.origin === window.origin ? a.pathname : a.href;
+            return a.origin === origin ? a.pathname : a.href;
         }
     };
 })(document, window, CKEDITOR);
