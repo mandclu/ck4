@@ -61,7 +61,7 @@
                     var summary = this.element.getChild(0);
 
                     summary.on('keyup', function (ev) {
-                        if (ev.data['$'].keyCode === 32) {
+                        if (ev.data['$'].key === ' ' || ev.data['$'].keyCode === 32) {
                             ev.data['$'].preventDefault();
                             editor.insertText(' ');
                         }
