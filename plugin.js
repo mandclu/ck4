@@ -51,9 +51,7 @@
                     return true;
                 },
                 downcast: function (el) {
-                    el.attributes = [];
                     el.children = el.children.slice(0, 1);
-                    el.children[0].attributes = [];
                     el.setHtml(el.getHtml() + this.editables.content.getData());
                 }
             });
