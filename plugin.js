@@ -1,12 +1,24 @@
 'use strict';
 
 (function (CKEDITOR) {
+    function intersect(haystack, needle) {
+        var filter = function (item) {
+            return haystack.indexOf(item) >= 0;
+        };
+
+        return Array.isArray(haystack) && Array.isArray(needle) && needle.filter(filter).length > 0;
+    }
+
     CKEDITOR.plugins.add('section', {
         requires: 'widget',
         icons: 'section',
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
+            if (!editor.config.section || !Array.isArray(editor.config.section)) {
+                return;
+            }
+
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
                 template: '<section><h2>Title</h2><div class="content"></div></section>',
@@ -22,7 +34,7 @@
                 allowedContent: 'section(*); h2; div(content)',
                 requiredContent: 'section; h2; div(content)',
                 upcast: function (el) {
-                    if (el.name !== 'section') {
+                    if (el.name !== 'section' || !intersect(editor.config.section, el.classes)) {
                         return false;
                     }
 
