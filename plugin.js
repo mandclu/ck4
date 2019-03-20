@@ -31,6 +31,10 @@
                     return section;
                 },
                 downcast: function () {
+                    if (!this.data.entity || !this.data.id) {
+                        return new CKEDITOR.htmlParser.text('');
+                    }
+
                     return new CKEDITOR.htmlParser.element('block', {'data-entity': this.data.entity, 'data-id': this.data.id});
                 },
                 init: function () {
