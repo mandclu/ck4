@@ -15,31 +15,35 @@
             editor.widgets.add('block', {
                 button: editor.lang.block.title,
                 template: '<section class="block"></section>',
-                allowedContent: 'block[!data-entity, !data-id]; section(!block)',
-                requiredContent: 'block[data-entity, data-id]; section(block)',
+                allowedContent: 'block[!data-block]; section(!block)',
+                requiredContent: 'block[data-block]; section(block)',
                 upcast: function (el, data) {
                     if (el.name !== 'block') {
                         return false;
                     }
 
-                    if (!el.attributes['data-entity'] || !el.attributes['data-id']) {
+                    var p;
+
+                    if (!el.attributes['data-block'] || !(p = el.attributes['data-block'].split('/')) || [1, 2].indexOf(p.length) < 0) {
                         return new CKEDITOR.htmlParser.text('');
                     }
 
-                    data.entity = el.attributes['data-entity'];
-                    data.id = el.attributes['data-id'];
+                    data.id = p.pop();
+                    data.entity = p.pop() || null;
                     var section = new CKEDITOR.htmlParser.element('section', {'class': 'block'});
-                    section.setHtml(el.attributes['data-entity'] + '/' + el.attributes['data-id']);
+                    section.setHtml(el.attributes['data-block']);
                     el.replaceWith(section);
 
                     return section;
                 },
                 downcast: function () {
-                    if (!this.data.entity || !this.data.id) {
+                    if (!this.data.id) {
                         return new CKEDITOR.htmlParser.text('');
                     }
 
-                    return new CKEDITOR.htmlParser.element('block', {'data-entity': this.data.entity, 'data-id': this.data.id});
+                    var block = (this.data.entity ? this.data.entity + '/' : '') + this.data.id;
+
+                    return new CKEDITOR.htmlParser.element('block', {'data-block': block});
                 },
                 init: function () {
                 },
