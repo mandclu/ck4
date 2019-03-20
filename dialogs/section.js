@@ -4,8 +4,9 @@
     CKEDITOR.dialog.add('section', function (editor) {
         var lang = editor.lang.section;
         var common = editor.lang.common;
-        var css = [[common.notSet, '']].concat(editor.config.section.map(function (item) {
-            return [item, item];
+        var cfg = editor.config.section;
+        var type = [[common.notSet, '']].concat(Object.getOwnPropertyNames(cfg).map(function (item) {
+            return [cfg[item], item];
         }).sort(function (a, b) {
             if (a[0] < b[0]) {
                 return -1;
@@ -29,15 +30,15 @@
                     label: lang.info,
                     elements: [
                         {
-                            id: 'css',
+                            id: 'type',
                             type: 'select',
-                            label: lang.css,
-                            items: css,
+                            label: lang.type,
+                            items: type,
                             setup: function (widget) {
-                                this.setValue(widget.data.css);
+                                this.setValue(widget.data.type || '');
                             },
                             commit: function (widget) {
-                                widget.setData('css', this.getValue());
+                                widget.setData('type', this.getValue());
                             },
                             validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired)
                         }

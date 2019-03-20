@@ -15,7 +15,9 @@
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
-            if (!editor.config.section || !Array.isArray(editor.config.section)) {
+            var cfg = editor.config.section ? Object.getOwnPropertyNames(editor.config.section) : [];
+
+            if (cfg.length <= 0) {
                 return;
             }
 
@@ -35,7 +37,7 @@
                 allowedContent: 'section(*); h2; div(content)',
                 requiredContent: 'section; h2; div(content)',
                 upcast: function (el) {
-                    if (el.name !== 'section' || !intersect(editor.config.section, el.classes)) {
+                    if (el.name !== 'section' || !intersect(cfg, el.classes)) {
                         return false;
                     }
 
@@ -64,7 +66,7 @@
                     return true;
                 },
                 downcast: function (el) {
-                    if (!this.data.css) {
+                    if (!this.data.type) {
                         return new CKEDITOR.htmlParser.text('');
                     }
 
@@ -75,8 +77,8 @@
                     return el;
                 },
                 data: function () {
-                    if (this.data.css) {
-                        this.element.setAttribute('class', this.data.css);
+                    if (this.data.type) {
+                        this.element.setAttribute('class', this.data.type);
                     }
                 }
             });

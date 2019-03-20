@@ -2,8 +2,8 @@
 
 (function (CKEDITOR) {
     CKEDITOR.plugins.setLang('section', 'en', {
-        css: 'CSS Class',
         title: 'Section',
+        type: 'Type',
         validateRequired: 'This field is required'
     });
 })(CKEDITOR);
