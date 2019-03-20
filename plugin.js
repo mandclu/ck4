@@ -57,7 +57,7 @@
 
                     // Add missing caption
                     if (crit(el) && el.children.length === 1) {
-                        el.add(new CKEDITOR.htmlParser.element('figcaption', {}));
+                        el.add(new CKEDITOR.htmlParser.element('figcaption'));
                     }
 
                     return crit(el) && el.children.length === 2  && (med(el.children[0]) || link(el.children[0])) && el.children[1].name === 'figcaption'
