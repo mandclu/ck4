@@ -1,6 +1,6 @@
 'use strict';
 
-(function (document, CKEDITOR) {
+(function (CKEDITOR) {
     CKEDITOR.dialog.add('media', function (editor) {
         var lang = editor.lang.media;
         var common = editor.lang.common;
@@ -144,4 +144,4 @@
             ]
         };
     });
-})(document, CKEDITOR);
+})(CKEDITOR);
