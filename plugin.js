@@ -1,9 +1,10 @@
 'use strict';
 
 (function (CKEDITOR) {
-    CKEDITOR.dtd.template = {};
-    CKEDITOR.dtd.$block.template = 1;
-    CKEDITOR.dtd.body.template = 1;
+    CKEDITOR.dtd.block = {};
+    CKEDITOR.dtd.$block.block = 1;
+    CKEDITOR.dtd.$empty.block = 1;
+    CKEDITOR.dtd.body.block = 1;
 
     CKEDITOR.plugins.add('block', {
         requires: 'widget',
@@ -13,14 +14,28 @@
         init: function (editor) {
             editor.widgets.add('block', {
                 button: editor.lang.block.title,
-                template: '<template class="block" data-entity="" data-id=""></template>',
-                allowedContent: 'template(!block)[!data-entity, !data-id]',
-                requiredContent: 'template(block)[data-entity, data-id]',
-                upcast: function (el) {
-                    return el.name === 'template' && el.hasClass('block') && el.attributes['data-entity'] && el.attributes['data-id'];
+                template: '<section class="block"></section>',
+                allowedContent: 'block[!data-entity, !data-id]; section(!block)',
+                requiredContent: 'block[data-entity, data-id]; section(block)',
+                upcast: function (el, data) {
+                    if (el.name !== 'block' || !el.attributes['data-entity'] || !el.attributes['data-id']) {
+                        return false;
+                    }
+
+                    data.entity = el.attributes['data-entity'];
+                    data.id = el.attributes['data-id'];
+                    var section = new CKEDITOR.htmlParser.element('section', {'class': 'block'});
+                    section.setHtml(el.attributes['data-entity'] + '/' + el.attributes['data-id']);
+                    el.replaceWith(section);
+
+                    return section;
                 },
-                downcast: function (el) {
-                    el.children = [];
+                downcast: function () {
+                    return new CKEDITOR.htmlParser.element('block', {'data-entity': this.data.entity, 'data-id': this.data.id});
+                },
+                init: function () {
+                },
+                data: function () {
                 }
             });
         }
