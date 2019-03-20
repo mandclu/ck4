@@ -64,9 +64,15 @@
                     return true;
                 },
                 downcast: function (el) {
+                    if (!this.data.css) {
+                        return new CKEDITOR.htmlParser.text('');
+                    }
+
                     el.children = el.children.slice(0, 1);
                     el.children[0].attributes = [];
                     el.setHtml(el.getHtml() + this.editables.content.getData());
+
+                    return el;
                 },
                 data: function () {
                     if (this.data.css) {
