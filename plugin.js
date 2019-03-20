@@ -1,9 +1,10 @@
 'use strict';
 
 (function (CKEDITOR) {
-    CKEDITOR.dtd['block'] = {};
-    CKEDITOR.dtd['$block']['block'] = 1;
-    CKEDITOR.dtd['$empty']['block'] = 1;
+    CKEDITOR.dtd.template = {};
+    CKEDITOR.dtd.$block.template = 1;
+    CKEDITOR.dtd.body.template = 1;
+
     CKEDITOR.plugins.add('block', {
         requires: 'widget',
         icons: 'block',
@@ -12,11 +13,11 @@
         init: function (editor) {
             editor.widgets.add('block', {
                 button: editor.lang.block.title,
-                template: '<block data-entity="" data-id="" />',
-                allowedContent: 'block[!data-entity, !data-id]',
-                requiredContent: 'block[data-entity, data-id]',
+                template: '<template class="block" data-entity="" data-id=""></template>',
+                allowedContent: 'template(!block)[!data-entity, !data-id]',
+                requiredContent: 'template(block)[data-entity, data-id]',
                 upcast: function (el) {
-                    return el.name === 'block' && el.attributes['data-entity'] && el.attributes['data-id'];
+                    return el.name === 'template' && el.hasClass('block') && el.attributes['data-entity'] && el.attributes['data-id'];
                 },
                 downcast: function (el) {
                     el.children = [];
