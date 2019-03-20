@@ -18,8 +18,12 @@
                 allowedContent: 'block[!data-entity, !data-id]; section(!block)',
                 requiredContent: 'block[data-entity, data-id]; section(block)',
                 upcast: function (el, data) {
-                    if (el.name !== 'block' || !el.attributes['data-entity'] || !el.attributes['data-id']) {
+                    if (el.name !== 'block') {
                         return false;
+                    }
+
+                    if (!el.attributes['data-entity'] || !el.attributes['data-id']) {
+                        return new CKEDITOR.htmlParser.text('');
                     }
 
                     data.entity = el.attributes['data-entity'];
