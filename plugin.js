@@ -21,7 +21,8 @@
 
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
-                template: '<section><h2>Title</h2><div class="content"></div></section>',
+                dialog: 'section',
+                template: '<section class=""><h2>Title</h2><div class="content"></div></section>',
                 editables: {
                     title: {
                         selector: 'h2',
@@ -66,8 +67,15 @@
                     el.children = el.children.slice(0, 1);
                     el.children[0].attributes = [];
                     el.setHtml(el.getHtml() + this.editables.content.getData());
+                },
+                data: function () {
+                    if (this.data.css) {
+                        this.element.setAttribute('class', this.data.css);
+                    }
                 }
             });
+
+            CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
         }
     });
 })(CKEDITOR);
