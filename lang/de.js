@@ -2,6 +2,10 @@
 
 (function (CKEDITOR) {
     CKEDITOR.plugins.setLang('block', 'de', {
-        title: 'Block'
+        content: 'Inhalt',
+        id: 'ID',
+        info: 'Info',
+        title: 'Block',
+        validateRequired: 'Dieses Feld ist erforderlich'
     });
 })(CKEDITOR);

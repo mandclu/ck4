@@ -5,6 +5,7 @@
     CKEDITOR.dtd.$block.block = 1;
     CKEDITOR.dtd.$empty.block = 1;
     CKEDITOR.dtd.body.block = 1;
+    var widget = null;
 
     CKEDITOR.plugins.add('block', {
         requires: 'widget',
@@ -14,42 +15,71 @@
         init: function (editor) {
             editor.widgets.add('block', {
                 button: editor.lang.block.title,
-                template: '<section class="block"></section>',
-                allowedContent: 'block[!data-block]; section(!block)',
-                requiredContent: 'block[data-block]; section(block)',
+                dialog: 'block',
+                template: '<div data-block=""></div>',
+                allowedContent: 'block[!id]; div[!data-block]',
+                requiredContent: 'block[id]; div[data-block]',
                 upcast: function (el, data) {
                     if (el.name !== 'block') {
                         return false;
                     }
 
-                    var p;
-
-                    if (!el.attributes['data-block'] || !(p = el.attributes['data-block'].split('/')) || [1, 2].indexOf(p.length) < 0) {
+                    if (!el.attributes['id']) {
                         return new CKEDITOR.htmlParser.text('');
                     }
 
-                    data.id = p.pop();
-                    data.entity = p.pop() || null;
-                    var section = new CKEDITOR.htmlParser.element('section', {'class': 'block'});
-                    section.setHtml(el.attributes['data-block']);
-                    el.replaceWith(section);
+                    data.id = el.attributes['id'];
+                    var div = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
+                    div.setHtml(data.id);
+                    el.replaceWith(div);
 
-                    return section;
+                    return div;
                 },
                 downcast: function () {
-                    if (!this.data.id) {
-                        return new CKEDITOR.htmlParser.text('');
+                    if (!!this.data.id) {
+                        return new CKEDITOR.htmlParser.element('block', {'id': this.data.id});
                     }
 
-                    var block = (this.data.entity ? this.data.entity + '/' : '') + this.data.id;
-
-                    return new CKEDITOR.htmlParser.element('block', {'data-block': block});
+                    return new CKEDITOR.htmlParser.text('');
                 },
                 init: function () {
+                    widget = this;
                 },
                 data: function () {
+                    if (!this.data.id) {
+                        return;
+                    }
+
+                    var widget = this;
+                    var el = widget.element;
+                    el.setAttribute('data-block', this.data.id);
+                    el.setHtml(this.data.content);
                 }
             });
+
+            CKEDITOR.dialog.add('block', this.path + 'dialogs/block.js');
         }
     });
+
+    CKEDITOR.on('dialogDefinition', function (dev) {
+        if (dev.data.name !== 'block' || !dev.editor.config.blockBrowser || !dev.editor.plugins.mediabrowser) {
+            return;
+        }
+
+        var button = dev.data.definition.contents[0].elements[1];
+        button.hidden = false;
+        button.onClick = function (ev) {
+            CKEDITOR.mediabrowser.open(dev.editor.config.blockBrowser, function (data) {
+                if (!!data.id) {
+                    var dialog = ev.sender.getDialog();
+
+                    ['id', 'content'].forEach(function (item) {
+                    if (!!data[item]) {
+                        dialog.getContentElement('info', item).setValue(data[item]);
+                    }
+                });
+                }
+            });
+        };
+    }, null, null, 1);
 })(CKEDITOR);
