@@ -5,7 +5,6 @@
     CKEDITOR.dtd.$block.block = 1;
     CKEDITOR.dtd.$empty.block = 1;
     CKEDITOR.dtd.body.block = 1;
-    var widget = null;
 
     CKEDITOR.plugins.add('block', {
         requires: 'widget',
@@ -42,18 +41,11 @@
 
                     return new CKEDITOR.htmlParser.text('');
                 },
-                init: function () {
-                    widget = this;
-                },
                 data: function () {
-                    if (!this.data.id) {
-                        return;
+                    if (this.data.id) {
+                        this.element.setAttribute('data-block', this.data.id);
+                        this.element.setHtml(this.data.content);
                     }
-
-                    var widget = this;
-                    var el = widget.element;
-                    el.setAttribute('data-block', this.data.id);
-                    el.setHtml(this.data.content);
                 }
             });
 
