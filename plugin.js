@@ -24,31 +24,31 @@
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
                 dialog: 'section',
-                template: '<section class=""><h2>Title</h2><div class="section-media"></div><div class="section-content"></div></section>',
+                template: '<section class=""><h2>Title</h2><div class="media"></div><div class="content"></div></section>',
                 editables: {
                     title: {
                         selector: 'h2',
                         allowedContent: 'a[!href]'
                     },
                     media: {
-                        selector: '.section-media',
+                        selector: '.media',
                         allowedContent: 'figure',
                         requiredContent: 'figure'
                     },
                     content: {
-                        selector: '.section-content'
+                        selector: '.content'
                     }
                 },
-                allowedContent: 'section(*); h2; div(!section-media); div(!section-content)',
-                requiredContent: 'section; h2; div(section-media); div(section-content)',
+                allowedContent: 'section(*); h2; div(!media); div(!content)',
+                requiredContent: 'section; h2; div(media); div(content)',
                 upcast: function (el) {
                     if (el.name !== 'section' || !intersect(cfg, el.classes)) {
                         return false;
                     }
 
                     var title = el.getFirst('h2');
-                    var media = new CKEDITOR.htmlParser.element('div', {'class': 'section-media'});
-                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'section-content'});
+                    var media = new CKEDITOR.htmlParser.element('div', {'class': 'media'});
+                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
 
                     if (!!title && title.children.length > 0 && title.children[0].type === CKEDITOR.NODE_ELEMENT) {
                         title.setHtml(title.children[0].getHtml());
