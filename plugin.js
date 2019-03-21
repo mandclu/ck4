@@ -7,8 +7,8 @@
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
-            editor.widgets.add('block', {
-                button: editor.lang.block.title,
+            editor.widgets.add('grid', {
+                button: editor.lang.grid.title,
                 template: '<div class="grid"><div class="content"></div></div>',
                 editables: {
                     content: {
