@@ -1,0 +1,58 @@
+/**
+ * Figure
+ */
+figure.audio,
+figure.iframe,
+figure.image,
+figure.video {
+    text-align: center;
+}
+
+figure.audio.left,
+figure.iframe.left,
+figure.image.left,
+figure.video.left {
+    float: left;
+    margin-right: 0.75rem;
+    text-align: left;
+}
+
+figure.audio.right,
+figure.iframe.right,
+figure.image.right,
+figure.video.right {
+    float: right;
+    margin-left: 0.75rem;
+    text-align: left;
+}
+
+/**
+ * Media
+ */
+audio,
+iframe,
+img,
+video {
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+figure.audio > :not(figcaption),
+figure.iframe > :not(figcaption),
+figure.image > :not(figcaption),
+figure.video > :not(figcaption) {
+    display: block;
+    margin: 0 auto;
+}
+
+/**
+ * Caption
+ */
+figure.audio figcaption,
+figure.iframe figcaption,
+figure.image figcaption,
+figure.video figcaption {
+    font-size: 0.875rem;
+    background: #eee;
+}
