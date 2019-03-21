@@ -1,0 +1,11 @@
+.grid > .content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.grid > .content > * {
+    width: calc(50% - 0.75rem);
+    margin-bottom: 1.5rem;
+    border: 0.0625rem dotted #ddd;
+}
