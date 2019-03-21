@@ -53,9 +53,18 @@
                 },
                 downcast: function (el) {
                     el.attributes = [];
-                    el.children = el.children.slice(0, 1);
                     el.children[0].attributes = [];
-                    el.setHtml(el.getHtml() + this.editables.content.getData());
+
+                    // Content
+                    el.children[1].setHtml(this.editables.content.getData());
+                    el.children[1].children.forEach(function (item) {
+                        if (item.isEmpty || item.getHtml().trim()) {
+                            el.add(item);
+                        }
+                    });
+                    el.children[1].remove();
+
+                    return el.children.length > 1 ? el : new CKEDITOR.htmlParser.text('');
                 },
                 init: function () {
                     var summary = this.element.getChild(0);
