@@ -32,7 +32,7 @@
                     },
                     media: {
                         selector: '.media',
-                        allowedContent: 'figure',
+                        allowedContent: 'figure(audio, iframe, image, video)',
                         requiredContent: 'figure'
                     },
                     content: {
