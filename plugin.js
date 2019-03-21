@@ -212,7 +212,6 @@
             });
 
             CKEDITOR.dialog.add('media', this.path + 'dialogs/media.js');
-            editor.addContentsCss(this.path + 'styles/media.css');
         }
     });
 
