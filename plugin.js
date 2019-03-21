@@ -9,7 +9,6 @@
         init: function (editor) {
             editor.widgets.add('block', {
                 button: editor.lang.block.title,
-                dialog: 'grid',
                 template: '<div class="grid"><div class="content"></div></div>',
                 editables: {
                     content: {
@@ -18,7 +17,7 @@
                 },
                 allowedContent: 'div(!grid); div(!content); figure section;',
                 requiredContent: 'div(grid); div(content)',
-                upcast: function (el, data) {
+                upcast: function (el) {
                     if (el.name !== 'div' && !el.hasClass('grid')) {
                         return false;
                     }
