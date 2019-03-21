@@ -50,7 +50,6 @@
             });
 
             CKEDITOR.dialog.add('block', this.path + 'dialogs/block.js');
-            editor.addContentsCss(this.path + 'styles/block.css');
         }
     });
 
