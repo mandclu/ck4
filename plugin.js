@@ -113,6 +113,7 @@
             });
 
             CKEDITOR.dialog.add('section', this.path + 'dialogs/section.js');
+            editor.addContentsCss(this.path + 'styles/section.css');
         }
     });
 })(CKEDITOR);
