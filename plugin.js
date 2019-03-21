@@ -10,14 +10,14 @@
         init: function (editor) {
             editor.widgets.add('detail', {
                 button: editor.lang.detail.title,
-                template: '<details><summary>Summary</summary><div class="details-content"></div></details>',
+                template: '<details><summary>Summary</summary><div class="content"></div></details>',
                 editables: {
                     summary: {
                         selector: 'summary',
                         allowedContent: {}
                     },
                     content: {
-                        selector: '.details-content'
+                        selector: '.content'
                     }
                 },
                 allowedContent: 'details summary',
@@ -28,7 +28,7 @@
                     }
 
                     var summary = el.getFirst('summary');
-                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'details-content'});
+                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
 
                     if (!!summary && summary.children.length > 0 && summary.children[0].type === CKEDITOR.NODE_ELEMENT) {
                         summary.setHtml(summary.children[0].getHtml());
