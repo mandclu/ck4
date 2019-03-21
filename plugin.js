@@ -80,7 +80,7 @@
                     // Content
                     el.children[2].setHtml(this.editables.content.getData());
                     el.children[2].children.forEach(function (item) {
-                        if (item.getHtml().trim()) {
+                        if (item.isEmpty || item.getHtml().trim()) {
                             el.add(item);
                         }
                     });
