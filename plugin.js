@@ -15,7 +15,7 @@
                         selector: '.content'
                     }
                 },
-                allowedContent: 'div(!grid); div(!content); figure section;',
+                allowedContent: 'div(!grid); div(!content);',
                 requiredContent: 'div(grid); div(content)',
                 upcast: function (el) {
                     if (el.name !== 'div' && !el.hasClass('grid')) {
@@ -36,7 +36,7 @@
                 downcast: function (el) {
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
-                        if (item.getHtml().trim()) {
+                        if (item.isEmpty || item.getHtml().trim()) {
                             el.add(item);
                         }
                     });
