@@ -1,6 +1,8 @@
 'use strict';
 
 (function (CKEDITOR) {
+    var allowed = ['block', 'div', 'figure', 'section'];
+
     CKEDITOR.plugins.add('grid', {
         requires: 'widget',
         icons: 'grid',
@@ -12,7 +14,8 @@
                 template: '<div class="grid"><div class="content"></div></div>',
                 editables: {
                     content: {
-                        selector: '.content'
+                        selector: '.content',
+                        allowedContent: 'section figure p; block[!id]; div[!data-block]'
                     }
                 },
                 allowedContent: 'div(!grid); div(!content);',
@@ -36,7 +39,7 @@
                 downcast: function (el) {
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
-                        if (item.isEmpty || item.getHtml().trim()) {
+                        if (allowed.indexOf(item.name) >= 0 && (item.isEmpty || item.getHtml().trim())) {
                             el.add(item);
                         }
                     });
