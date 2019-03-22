@@ -10,7 +10,7 @@
         init: function (editor) {
             editor.widgets.add('detail', {
                 button: editor.lang.detail.title,
-                template: '<details><summary>Summary</summary><div class="content"></div></details>',
+                template: '<details><summary></summary><div class="content"></div></details>',
                 editables: {
                     summary: {
                         selector: 'summary',
@@ -34,12 +34,8 @@
                         summary.setHtml(summary.children[0].getHtml());
                     } else if (!!summary && summary.children.length > 0 && summary.children[0].type === CKEDITOR.NODE_TEXT) {
                         summary.setHtml(summary.children[0].value);
-                    } else if (!!summary) {
-                        summary.setHtml('Summary');
-                    } else {
-                        summary = new CKEDITOR.htmlParser.element('summary');
-                        summary.setHtml('Summary');
-                        el.add(summary, 0);
+                    } else if (!summary) {
+                        el.add(new CKEDITOR.htmlParser.element('summary'), 0);
                     }
 
                     el.add(content, 1);
