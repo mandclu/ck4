@@ -2,15 +2,14 @@
 
 (function (CKEDITOR) {
     function api(url) {
-        var data;
         var xhr = new XMLHttpRequest();
 
         try {
             xhr.open('GET', url, false);
             xhr.send(null);
 
-            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300 && (data = JSON.parse(xhr.responseText))) {
-                return typeof data.content === 'string' ? data.content : '';
+            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+                return xhr.responseText || '';
             }
         } catch (e) {
             console.log(e);
