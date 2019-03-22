@@ -75,9 +75,9 @@
      * Public API
      */
     CKEDITOR.block = {
-        get: function (api, id) {
-            if (id && api && (typeof api === 'function' || typeof api === 'string')) {
-                return CKEDITOR.api.get(typeof api === 'function' ? api(id) : api + '?id=' + id);
+        get: function (url, id) {
+            if (id && url && (typeof url === 'function' || typeof url === 'string')) {
+                return CKEDITOR.api.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
             }
 
             return null;
