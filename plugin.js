@@ -18,7 +18,7 @@
                 allowedContent: 'div(!grid); div(!content);',
                 requiredContent: 'div(grid); div(content)',
                 upcast: function (el) {
-                    if (el.name !== 'div' && !el.hasClass('grid')) {
+                    if (el.name !== 'div' || !el.hasClass('grid')) {
                         return false;
                     }
 
