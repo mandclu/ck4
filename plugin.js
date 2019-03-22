@@ -1,6 +1,24 @@
 'use strict';
 
 (function (CKEDITOR) {
+    function api(url) {
+        var data;
+        var xhr = new XMLHttpRequest();
+
+        try {
+            xhr.open('GET', url, false);
+            xhr.send(null);
+
+            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300 && (data = JSON.parse(xhr.responseText))) {
+                return typeof data.content === 'string' ? data.content : '';
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        return '';
+    }
+
     CKEDITOR.dtd.block = {};
     CKEDITOR.dtd.$block.block = 1;
     CKEDITOR.dtd.$empty.block = 1;
@@ -28,8 +46,10 @@
                     }
 
                     data.id = el.attributes['id'];
+                    var url = typeof editor.config.blockApi === 'function' ? editor.config.blockApi(data.id) : null;
+                    var content = url ? api(url) : data.id;
                     var div = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
-                    div.setHtml(data.id);
+                    div.setHtml(content);
                     el.replaceWith(div);
 
                     return div;
