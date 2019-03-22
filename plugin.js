@@ -45,10 +45,9 @@
                     }
 
                     data.id = el.attributes['id'];
-                    var url = typeof editor.config.blockApi === 'function' ? editor.config.blockApi(data.id) : null;
-                    var content = url ? api(url) : data.id;
                     var div = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
-                    div.setHtml(content);
+                    var url = typeof editor.config.blockApi === 'function' ? editor.config.blockApi(data.id) : null;
+                    data.content = url ? api(url) : data.id;
                     el.replaceWith(div);
 
                     return div;
