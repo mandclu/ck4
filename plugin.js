@@ -1,6 +1,6 @@
 'use strict';
 
-(function (document, window, CKEDITOR) {
+(function (window, document, CKEDITOR) {
     var container = ['hbox', 'vbox', 'fieldset'];
 
     CKEDITOR.plugins.add('mediabrowser', {});
@@ -89,4 +89,4 @@
             return a.origin;
         }
     };
-})(document, window, CKEDITOR);
+})(window, document, CKEDITOR);
