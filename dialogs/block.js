@@ -26,8 +26,12 @@
                                 widget.setData('id', this.getValue());
                             },
                             validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired),
-                            onChange: function () {
-                                this.getDialog().getContentElement('info', 'content').setValue(this.getValue());
+                            onLoad: function () {
+                                var dialog = this.getDialog();
+                                this.getInputElement().$.addEventListener('change', function () {
+                                    var content = CKEDITOR.block.get(editor.config.blockApi, this.value) || this.value;
+                                    dialog.getContentElement('info', 'content').setValue(content);
+                                });
                             }
                         },
                         {

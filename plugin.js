@@ -1,23 +1,6 @@
 'use strict';
 
 (function (CKEDITOR) {
-    function api(url) {
-        var xhr = new XMLHttpRequest();
-
-        try {
-            xhr.open('GET', url, false);
-            xhr.send(null);
-
-            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-                return xhr.responseText || '';
-            }
-        } catch (e) {
-            console.log(e);
-        }
-
-        return '';
-    }
-
     CKEDITOR.dtd.block = {};
     CKEDITOR.dtd.$block.block = 1;
     CKEDITOR.dtd.$empty.block = 1;
@@ -45,9 +28,8 @@
                     }
 
                     data.id = el.attributes['id'];
+                    data.content = CKEDITOR.block.get(editor.config.blockApi, data.id) || data.id;
                     var div = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
-                    var url = typeof editor.config.blockApi === 'function' ? editor.config.blockApi(data.id) : null;
-                    data.content = url ? api(url) : data.id;
                     el.replaceWith(div);
 
                     return div;
@@ -88,4 +70,31 @@
             });
         };
     }, null, null, 1);
+
+    /**
+     * Public API
+     */
+    CKEDITOR.block = {
+        get: function (api, id) {
+            if (!id || !api || typeof api !== 'function' && typeof api !== 'string') {
+                return null;
+            }
+
+            var url = typeof api === 'function' ? api(id) : api + '?id=' + id;
+            var xhr = new XMLHttpRequest();
+
+            try {
+                xhr.open('GET', url, false);
+                xhr.send(null);
+
+                if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+                    return xhr.responseText || '';
+                }
+            } catch (e) {
+                console.log(e);
+            }
+
+            return '';
+        }
+    }
 })(CKEDITOR);
