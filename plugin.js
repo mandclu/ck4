@@ -21,7 +21,7 @@
                 dialog: 'media',
                 template: '<figure class="image"><img /><figcaption></figcaption></figure>',
                 editables: editables,
-                allowedContent: 'figure(*); a[!href]; audio iframe img video[!src, width, height, alt, controls, allowfullscreen]; figcaption',
+                allowedContent: 'figure(audio, iframe, image, video, left, right); a[!href]; audio[!src, controls]; iframe[!src, width, height, allowfullscreen]; img[!src, width, height, alt]; video[!src, width, height, controls]; figcaption',
                 requiredContent: 'figure; audio iframe img video[src]; figcaption',
                 defaults: {
                     align: '',
@@ -194,9 +194,15 @@
                         media.removeAttribute('allowfullscreen');
                         media.setAttribute('alt', widget.data.alt);
                         media.removeAttribute('controls');
-                    } else if (['audio', 'video'].indexOf(type) >= 0) {
+                    } else if (type === 'video') {
                         media.removeAttribute('allowfullscreen');
                         media.removeAttribute('alt');
+                        media.setAttribute('controls', 'controls');
+                    } else if (type === 'audio') {
+                        media.removeAttribute('allowfullscreen');
+                        media.removeAttribute('alt');
+                        media.removeAttribute('height');
+                        media.removeAttribute('width');
                         media.setAttribute('controls', 'controls');
                     } else if (type === 'iframe') {
                         media.setAttribute('allowfullscreen', 'allowfullscreen');
