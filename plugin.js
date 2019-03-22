@@ -82,12 +82,8 @@
             CKEDITOR.mediabrowser.open(dev.editor.config.blockBrowser, function (data) {
                 if (!!data.id) {
                     var dialog = ev.sender.getDialog();
-
-                    ['id', 'content'].forEach(function (item) {
-                    if (!!data[item]) {
-                        dialog.getContentElement('info', item).setValue(data[item]);
-                    }
-                });
+                    dialog.getContentElement('info', 'id').setValue(data.id);
+                    dialog.getContentElement('info', 'content').setValue(data.content || data.id);
                 }
             });
         };

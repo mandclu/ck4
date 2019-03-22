@@ -27,7 +27,7 @@
                             },
                             validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired),
                             onChange: function () {
-                                this.getDialog().getContentElement('info', 'content').setValue('');
+                                this.getDialog().getContentElement('info', 'content').setValue(this.getValue());
                             }
                         },
                         {
