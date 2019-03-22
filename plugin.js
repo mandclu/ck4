@@ -24,7 +24,7 @@
             editor.widgets.add('section', {
                 button: editor.lang.section.title,
                 dialog: 'section',
-                template: '<section class=""><h2>Title</h2><div class="media"></div><div class="content"></div></section>',
+                template: '<section class=""><h2></h2><div class="media"></div><div class="content"></div></section>',
                 editables: {
                     title: {
                         selector: 'h2',
@@ -54,12 +54,8 @@
                         title.setHtml(title.children[0].getHtml());
                     } else if (!!title && title.children.length > 0 && title.children[0].type === CKEDITOR.NODE_TEXT) {
                         title.setHtml(title.children[0].value);
-                    } else if (!!title) {
-                        title.setHtml('Title');
-                    } else {
-                        title = new CKEDITOR.htmlParser.element('h2');
-                        title.setHtml('Title');
-                        el.add(title, 0);
+                    } else if (!title) {
+                        el.add(new CKEDITOR.htmlParser.element('h2'), 0);
                     }
 
                     el.add(media, 1);
