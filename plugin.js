@@ -1,6 +1,6 @@
 'use strict';
 
-(function (document, window, CKEDITOR) {
+(function (window, document, CKEDITOR) {
     var align = {left: 'left', right: 'right'};
     var attr = ['alt', 'height', 'src', 'width'];
     var editables = {
@@ -324,4 +324,4 @@
             return a.origin === origin ? a.pathname : a.href;
         }
     };
-})(document, window, CKEDITOR);
+})(window, document, CKEDITOR);
