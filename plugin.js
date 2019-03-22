@@ -7,7 +7,7 @@
     CKEDITOR.dtd.body.block = 1;
 
     CKEDITOR.plugins.add('block', {
-        requires: 'dialog,widget',
+        requires: 'api,dialog,widget',
         icons: 'block',
         hidpi: true,
         lang: 'de,en',
@@ -76,25 +76,11 @@
      */
     CKEDITOR.block = {
         get: function (api, id) {
-            if (!id || !api || typeof api !== 'function' && typeof api !== 'string') {
-                return null;
+            if (id && api && (typeof api === 'function' || typeof api === 'string')) {
+                return CKEDITOR.api.get(typeof api === 'function' ? api(id) : api + '?id=' + id);
             }
 
-            var url = typeof api === 'function' ? api(id) : api + '?id=' + id;
-            var xhr = new XMLHttpRequest();
-
-            try {
-                xhr.open('GET', url, false);
-                xhr.send(null);
-
-                if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-                    return xhr.responseText || '';
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
-            return '';
+            return null;
         }
     }
 })(CKEDITOR);
