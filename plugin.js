@@ -10,7 +10,7 @@
     }
 
     CKEDITOR.plugins.add('section', {
-        requires: 'widget',
+        requires: 'dialog,widget',
         icons: 'section',
         hidpi: true,
         lang: 'de,en',
