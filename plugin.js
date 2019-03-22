@@ -7,7 +7,7 @@
     CKEDITOR.dtd.body.block = 1;
 
     CKEDITOR.plugins.add('block', {
-        requires: 'widget',
+        requires: 'dialog,widget',
         icons: 'block',
         hidpi: true,
         lang: 'de,en',
