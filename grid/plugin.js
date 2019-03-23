@@ -18,7 +18,7 @@
                         allowedContent: 'section figure p; block[!id]; div[!data-block]'
                     }
                 },
-                allowedContent: 'div(!grid); div(!content);',
+                allowedContent: 'div(!grid); div(!content)',
                 requiredContent: 'div(grid); div(content)',
                 upcast: function (el) {
                     if (el.name !== 'div' || !el.hasClass('grid')) {
