@@ -54,14 +54,14 @@
     });
 
     CKEDITOR.on('dialogDefinition', function (dev) {
-        if (dev.data.name !== 'block' || !dev.editor.config.blockBrowser || !dev.editor.plugins.mediabrowser) {
+        if (dev.data.name !== 'block' || !dev.editor.config.blockBrowser) {
             return;
         }
 
         var button = dev.data.definition.contents[0].elements[1];
         button.hidden = false;
         button.onClick = function (ev) {
-            CKEDITOR.mediabrowser.open(dev.editor.config.blockBrowser, function (data) {
+            CKEDITOR.api.browser(dev.editor.config.blockBrowser, 'block', function (data) {
                 if (!!data.id) {
                     var dialog = ev.sender.getDialog();
                     dialog.getContentElement('info', 'id').setValue(data.id);
