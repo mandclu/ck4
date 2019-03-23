@@ -18,6 +18,10 @@ If you use the [mediabrowser add-on](https://ckeditor.com/cke4/addon/mediabrowse
         type: 'image' // optional, one of audio, iframe, image or video
     }
 
-## Example
+## Demo
 
-You can see this plugin in action @ https://akilli.github.io/rte/ck4/
+https://akilli.github.io/rte/ck4
+
+## Minimalistic browser example
+
+https://github.com/akilli/rte/tree/master/browser

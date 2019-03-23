@@ -2,6 +2,10 @@
 
 @todo
 
-## Example
+## Demo
 
-You can see this plugin in action @ https://akilli.github.io/rte/ck4/
+https://akilli.github.io/rte/ck4
+
+## Minimalistic browser example
+
+https://github.com/akilli/rte/tree/master/browser

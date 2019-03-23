@@ -2,6 +2,6 @@
 
 This widget handles details elements (`<details>` and `<summary>`). No configuration necessary.
 
-## Example
+## Demo
 
-You can see this plugin in action @ https://akilli.github.io/rte/ck4/
+https://akilli.github.io/rte/ck4
