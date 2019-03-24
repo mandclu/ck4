@@ -22,6 +22,14 @@
                 allowedContent: 'figure(!quote); blockquote; figcaption',
                 requiredContent: 'figure(quote); blockquote; figcaption',
                 upcast: function (el) {
+                    if (el.name === 'blockquote' && el.children.length > 0) {
+                        var figure = new CKEDITOR.htmlParser.element('figure', {class: 'quote'});
+                        el.wrapWith(figure);
+                        figure.add(new CKEDITOR.htmlParser.element('figcaption'));
+
+                        return figure;
+                    }
+
                     if (el.name !== 'figure' || !el.hasClass('quote')) {
                         return false;
                     }
@@ -40,6 +48,7 @@
                     return el;
                 },
                 downcast: function (el) {
+                    // Quote
                     el.children[0].attributes = [];
                     el.children[0].setHtml(this.editables.quote.getData());
                     el.children[0].children.forEach(function (item) {
@@ -56,11 +65,7 @@
                     el.children[1].attributes = [];
                     el.children[1].setHtml(this.editables.caption.getData());
 
-                    if (!el.children[1].getHtml().trim()) {
-                        el.children[1].remove();
-                    }
-
-                    return el;
+                    return !el.children[1].getHtml().trim() ? el.children[0] : el;
                 }
             });
         }
