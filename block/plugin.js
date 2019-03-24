@@ -37,7 +37,7 @@
                     }
 
                     data.id = el.attributes['id'];
-                    data.content = CKEDITOR.block.get(editor.config.blockApi, data.id) || data.id;
+                    data.content = get(editor.config.blockApi, data.id) || data.id;
                     var div = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
                     el.replaceWith(div);
 
@@ -69,7 +69,20 @@
      * Dialog definition
      */
     CKEDITOR.on('dialogDefinition', function (ev) {
-        if (ev.data.name === 'block' && !!ev.editor.plugins.browser && typeof ev.editor.config.blockBrowser === 'string' && !!ev.editor.config.blockBrowser) {
+        if (ev.data.name !== 'block') {
+            return;
+        }
+
+        var id = ev.data.definition.contents[0].elements[0];
+        id.onLoad = function () {
+            var dialog = this.getDialog();
+            this.getInputElement().$.addEventListener('change', function () {
+                var content = get(editor.config.blockApi, this.value) || this.value;
+                dialog.getContentElement('info', 'content').setValue(content);
+            });
+        };
+
+        if (!!ev.editor.plugins.browser && typeof ev.editor.config.blockBrowser === 'string' && !!ev.editor.config.blockBrowser) {
             var button = ev.data.definition.contents[0].elements[1];
             button.hidden = false;
             button.browser = function (data) {
@@ -84,15 +97,18 @@
     }, null, null, 1);
 
     /**
-     * Public API
+     * Returns content from API
+     *
+     * @param {string} url
+     * @param {string} id
+     *
+     * @return {string|null}
      */
-    CKEDITOR.block = {
-        get: function (url, id) {
-            if (id && url && (typeof url === 'function' || typeof url === 'string')) {
-                return CKEDITOR.api.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
-            }
-
-            return null;
+    function get(url, id) {
+        if (id && url && (typeof url === 'function' || typeof url === 'string')) {
+            return CKEDITOR.api.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
         }
+
+        return null;
     }
 })(CKEDITOR);
