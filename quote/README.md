@@ -13,7 +13,7 @@ The figure element will have the CSS class `quote`, so the resulting HTML would 
         </figcaption>
     </figure>
 
-If the caption is empty, the blockquote element will be unwrapped, so the resulting HTML would be just
+If the caption is empty, the blockquote element will be unwrapped, so the resulting HTML would just be
 
     <blockquote>
         ...
