@@ -1,12 +1,9 @@
 'use strict';
 
 /**
- * Mediabrowser API
- *
- * @deprecated You can use the API plugin directly instead
- * @see https://ckeditor.com/cke4/addon/api
+ * Media Browser
  */
-(function (window, document, CKEDITOR) {
+(function (CKEDITOR) {
     /**
      * Plugin
      */
@@ -22,6 +19,7 @@
      *
      * @class
      * @singleton
+     * @deprecated Use api plugin {@see CKEDITOR.api} directly
      */
     CKEDITOR.mediabrowser = {
         /**
@@ -66,7 +64,49 @@
      */
     function dialogDefinition (ev) {
         if (!!ev.editor.plugins.mediabrowser && !!ev.editor.config.mediabrowserUrl) {
-            CKEDITOR.api.browserDialog(ev.editor.config.mediabrowserUrl, 'mediabrowser', 'mediabrowser', ev.data.definition);
+            browserDialog(ev.editor.config.mediabrowserUrl, ev.data.definition);
         }
     }
-})(window, document, CKEDITOR);
+
+    /**
+     * Initializes all mediabrowser buttons for given dialog definition
+     *
+     * @param {string} url
+     * @param {CKEDITOR.dialog.definition} def
+     */
+    function browserDialog(url, def) {
+        if (!!url && Array.isArray(def.contents) && def.contents.length > 0) {
+            for (var i = 0; i < def.contents.length; ++i) {
+                if (def.contents[i] && def.contents[i].elements) {
+                    browserRegister(url, def.contents[i].elements);
+                }
+            }
+        }
+    }
+
+    /**
+     * Recursively finds and unhides all mediabrowser button elements and sets the onClick callback
+     *
+     * A mediabrowser button is a button element with a `mediabrowser` property that is a callback function. This
+     * callback function is later executed when the mediabrowser window sends a message.
+     *
+     * @param {string} url
+     * @param {CKEDITOR.dialog.definition.uiElement[]} items
+     */
+    function browserRegister(url, items) {
+        if (!!url && Array.isArray(items)) {
+            items.forEach(function (item) {
+                if (item.type === 'button' && item.hasOwnProperty('mediabrowser') && typeof item.mediabrowser === 'function') {
+                    item.hidden = false;
+                    item.onClick = function (ev) {
+                        CKEDITOR.api.browser(url, 'mediabrowser', function (data) {
+                            ev.sender.mediabrowser.call(ev.sender, data);
+                        });
+                    };
+                } else if (defaults.container.indexOf(item.type) >= 0 && item.children && item.children.length > 0) {
+                    browserRegister(url, item.children);
+                }
+            });
+        }
+    }
+})(CKEDITOR);
