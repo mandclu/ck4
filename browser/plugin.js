@@ -5,6 +5,13 @@
  */
 (function (CKEDITOR) {
     /**
+     * Defaults
+     */
+    var defaults = {
+        container: ['hbox', 'vbox', 'fieldset']
+    };
+
+    /**
      * Plugin
      */
     CKEDITOR.plugins.add('browser', {requires: 'api'});

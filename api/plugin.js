@@ -5,7 +5,6 @@
      * Defaults
      */
     var defaults = {
-        container: ['hbox', 'vbox', 'fieldset'],
         popup: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
             'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width
     };
