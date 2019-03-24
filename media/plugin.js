@@ -242,6 +242,9 @@
 
     /**
      * Public API
+     *
+     * @class
+     * @singleton
      */
     CKEDITOR.media = {
         /**
@@ -275,7 +278,7 @@
          * @return {string[]}
          */
         getTypes: function () {
-            return Object.getOwnPropertyNames(this.types);
+            return Object.getOwnPropertyNames(CKEDITOR.media.types);
         },
 
         /**
@@ -286,7 +289,7 @@
          * @return {boolean}
          */
         hasType: function (type) {
-            return this.types.hasOwnProperty(type);
+            return CKEDITOR.media.types.hasOwnProperty(type);
         },
 
         /**
@@ -297,10 +300,10 @@
          * @return {string|null}
          */
         getTypeFromElement: function (element) {
-            var types = this.getTypes();
+            var types = CKEDITOR.media.getTypes();
 
             for (var i = 0; i < types.length; ++i) {
-                if (this.types[types[i]].element === element) {
+                if (CKEDITOR.media.types[types[i]].element === element) {
                     return types[i];
                 }
             }
@@ -316,15 +319,14 @@
          * @return {string}
          */
         getTypeFromUrl: function (url) {
-            var key = 'content-type';
-            var data = CKEDITOR.api.head(url, [key]);
+            var contentType = CKEDITOR.api.head(url, ['content-type'])['content-type'] || null;
 
-            if (data.hasOwnProperty(key) && data[key]) {
-                var type = data[key].split(';')[0].trim();
-                var types = this.getTypes();
+            if (!!contentType) {
+                var type = contentType.split(';')[0].trim();
+                var types = CKEDITOR.media.getTypes();
 
                 for (var i = 0; i < types.length; ++i) {
-                    if (this.types[types[i]].mime.indexOf(type) >= 0) {
+                    if (CKEDITOR.media.types[types[i]].mime.indexOf(type) >= 0) {
                         return types[i];
                     }
                 }
@@ -341,7 +343,7 @@
          * @return {string|null}
          */
         getTypeElement: function (type) {
-            return this.hasType(type) ? this.types[type].element : null;
+            return CKEDITOR.media.hasType(type) ? CKEDITOR.media.types[type].element : null;
         },
 
         /**
