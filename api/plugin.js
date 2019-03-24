@@ -140,52 +140,6 @@
         },
 
         /**
-         * Initializes all browser buttons for given dialog definition
-         *
-         * @param {string} url
-         * @param {string} name
-         * @param {string} prop
-         * @param {CKEDITOR.dialog.definition} def
-         */
-        browserDialog: function (url, name, prop, def) {
-            if (!!url && !!name && !!def.contents && Array.isArray(def.contents)) {
-                for (var i = 0; i < def.contents.length; ++i) {
-                    if (def.contents[i] && def.contents[i].elements) {
-                        CKEDITOR.api.browserRegister(url, name, prop, def.contents[i].elements);
-                    }
-                }
-            }
-        },
-
-        /**
-         * Recursively finds and unhides all browser button elements and sets the onClick callback
-         *
-         * A browser button is a button element with a specific property `prop` that is a callback function. This
-         * callback function is later executed when the browser window sends a message.
-         *
-         * @param {string} url
-         * @param {string} name
-         * @param {string} prop
-         * @param {CKEDITOR.dialog.definition.uiElement[]} items
-         */
-        browserRegister: function (url, name, prop, items) {
-            if (!!url && !!name && Array.isArray(items)) {
-                items.forEach(function (item) {
-                    if (item.type === 'button' && item.hasOwnProperty(prop) && typeof item[prop] === 'function') {
-                        item.hidden = false;
-                        item.onClick = function (ev) {
-                            CKEDITOR.api.browser(url, name, function (data) {
-                                ev.sender[prop].call(ev.sender, data);
-                            });
-                        };
-                    } else if (defaults.container.indexOf(item.type) >= 0 && item.children && item.children.length > 0) {
-                        CKEDITOR.api.browserRegister(url, name, prop, item.children);
-                    }
-                });
-            }
-        },
-
-        /**
          * Opens a new window with given name and options
          *
          * @param {string} url
