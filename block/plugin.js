@@ -1,17 +1,26 @@
 'use strict';
 
 (function (CKEDITOR) {
+    /**
+     * DTD
+     */
     CKEDITOR.dtd.block = {};
     CKEDITOR.dtd.$block.block = 1;
     CKEDITOR.dtd.$empty.block = 1;
     CKEDITOR.dtd.body.block = 1;
 
+    /**
+     * Plugin
+     */
     CKEDITOR.plugins.add('block', {
         requires: 'api,dialog,widget',
         icons: 'block',
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
+            /**
+             * Widget
+             */
             editor.widgets.add('block', {
                 button: editor.lang.block.title,
                 dialog: 'block',
@@ -49,10 +58,16 @@
                 }
             });
 
+            /**
+             * Dialog
+             */
             CKEDITOR.dialog.add('block', this.path + 'dialogs/block.js');
         }
     });
 
+    /**
+     * Dialog definition
+     */
     CKEDITOR.on('dialogDefinition', function (dev) {
         if (dev.data.name !== 'block' || !dev.editor.config.blockBrowser) {
             return;

@@ -1,26 +1,37 @@
 'use strict';
 
 (function (window, document, CKEDITOR) {
-    var align = {left: 'left', right: 'right'};
-    var attr = ['alt', 'height', 'src', 'width'];
-    var editables = {
-        caption: {
-            selector: 'figcaption',
-            allowedContent: 'br em s strong sub sup u; a[!href]'
+    /**
+     * Defaults
+     */
+    var defaults = {
+        align: {left: 'left', right: 'right'},
+        attr: ['alt', 'height', 'src', 'width'],
+        editables: {
+            caption: {
+                selector: 'figcaption',
+                allowedContent: 'br em s strong sub sup u; a[!href]'
+            }
         }
     };
 
+    /**
+     * Plugin
+     */
     CKEDITOR.plugins.add('media', {
         requires: 'dialog,widget',
         icons: 'media',
         hidpi: true,
         lang: 'de,en,uk,ru',
         init: function (editor) {
+            /**
+             * Widget
+             */
             editor.widgets.add('media', {
                 button: editor.lang.media.title,
                 dialog: 'media',
                 template: '<figure class="image"><img /><figcaption></figcaption></figure>',
-                editables: editables,
+                editables: defaults.editables,
                 allowedContent: 'figure(audio, iframe, image, video, left, right); a[!href]; audio[!src, controls]; iframe[!src, width, height, allowfullscreen]; img[!src, width, height, alt]; video[!src, width, height, controls]; figcaption',
                 requiredContent: 'figure; audio iframe img video[src]; figcaption',
                 defaults: {
@@ -107,16 +118,16 @@
                         widget.setData('type', CKEDITOR.media.getTypeFromElement(media.getName()));
                     }
 
-                    attr.forEach(function (item) {
+                    defaults.attr.forEach(function (item) {
                         if (media.hasAttribute(item)) {
                             widget.setData(item, media.getAttribute(item));
                         }
                     });
 
                     // Align
-                    if (el.hasClass(align.left)) {
+                    if (el.hasClass(defaults.align.left)) {
                         widget.setData('align', 'left');
-                    } else if (el.hasClass(align.right)) {
+                    } else if (el.hasClass(defaults.align.right)) {
                         widget.setData('align', 'right');
                     }
                 },
@@ -132,7 +143,7 @@
                         return;
                     }
 
-                    CKEDITOR.media.getTypes().concat([align.left, align.right]).forEach(function (item) {
+                    CKEDITOR.media.getTypes().concat([defaults.align.left, defaults.align.right]).forEach(function (item) {
                         el.removeClass(item);
                     });
 
@@ -145,14 +156,14 @@
 
                     if (widget.data.caption && el.getName() !== 'figure') {
                         el.renameNode('figure');
-                        attr.forEach(function (item) {
+                        defaults.attr.forEach(function (item) {
                             el.removeAttribute(item);
                         });
                         media = new CKEDITOR.dom.element(name);
                         el.append(media, true);
                         caption = new CKEDITOR.dom.element('figcaption');
                         el.append(caption);
-                        widget.initEditable('caption', editables.caption);
+                        widget.initEditable('caption', defaults.editables.caption);
                         widget.wrapper.renameNode('div');
                         widget.wrapper.removeClass('cke_widget_inline');
                         widget.wrapper.addClass('cke_widget_block');
@@ -211,46 +222,31 @@
                     }
 
                     // Align
-                    if (widget.data.align && align.hasOwnProperty(widget.data.align)) {
-                        el.addClass(align[widget.data.align]);
+                    if (widget.data.align && defaults.align.hasOwnProperty(widget.data.align)) {
+                        el.addClass(defaults.align[widget.data.align]);
                     }
                 }
             });
 
+            /**
+             * Dialog
+             */
             CKEDITOR.dialog.add('media', this.path + 'dialogs/media.js');
         }
     });
 
-    CKEDITOR.on('dialogDefinition', function (ev) {
-        if (ev.data.name !== 'media') {
-            return;
-        }
-
-        var button = ev.data.definition.contents[0].elements[1];
-
-        if (!!ev.editor.plugins.mediabrowser) {
-            button.mediabrowser = function (data) {
-                if (!data.src) {
-                    return;
-                }
-
-                var dialog = this.getDialog();
-
-                ['src', 'type', 'alt'].forEach(function (item) {
-                    if (!!data[item]) {
-                        dialog.getContentElement('info', item).setValue(data[item]);
-                    }
-                });
-            };
-        } else if (!!ev.editor.plugins.filebrowser) {
-            button.filebrowser = 'info:src';
-        }
-    }, null, null, 1);
+    /**
+     * Dialog definition
+     */
+    CKEDITOR.on('dialogDefinition', dialogDefinition, null, null, 1);
 
     /**
      * Public API
      */
     CKEDITOR.media = {
+        /**
+         * Types
+         */
         types: {
             audio: {
                 element: 'audio',
@@ -272,12 +268,34 @@
                 mime: ['video/mp4', 'video/ogg', 'video/webm']
             }
         },
+
+        /**
+         * Returns all type names
+         *
+         * @return {string[]}
+         */
         getTypes: function () {
             return Object.getOwnPropertyNames(this.types);
         },
+
+        /**
+         * Indicates if given type exists
+         *
+         * @param {string} type
+         *
+         * @return {boolean}
+         */
         hasType: function (type) {
             return this.types.hasOwnProperty(type);
         },
+
+        /**
+         * Determines type from HTML element
+         *
+         * @param {string} element
+         *
+         * @return {string|null}
+         */
         getTypeFromElement: function (element) {
             var types = this.getTypes();
 
@@ -289,19 +307,20 @@
 
             return null;
         },
+
+        /**
+         * Determines type from URL by trying to map the content
+         *
+         * @param {string} url
+         *
+         * @return {string}
+         */
         getTypeFromUrl: function (url) {
-            var xhr = new XMLHttpRequest();
+            var key = 'content-type';
+            var data = CKEDITOR.api.head(url, [key]);
 
-            try {
-                xhr.open('HEAD', url, false);
-                xhr.send();
-            } catch (e) {
-                console.log(e);
-                return '';
-            }
-
-            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-                var type = xhr.getResponseHeader('Content-Type').split(';')[0].trim();
+            if (data.hasOwnProperty(key) && data[key]) {
+                var type = data[key].split(';')[0].trim();
                 var types = this.getTypes();
 
                 for (var i = 0; i < types.length; ++i) {
@@ -313,9 +332,25 @@
 
             return '';
         },
+
+        /**
+         * Returns HTML element for given type
+         *
+         * @param {string} type
+         *
+         * @return {string|null}
+         */
         getTypeElement: function (type) {
             return this.hasType(type) ? this.types[type].element : null;
         },
+
+        /**
+         * Transforms an absolute URL to an internal one, i.e. only returns the pathname, if it has the same origin
+         *
+         * @param {string} url
+         *
+         * @return {string}
+         */
         getUrl: function (url) {
             var a = document.createElement('a');
             var origin = window.origin || window.location.origin;
@@ -324,4 +359,37 @@
             return a.origin === origin ? a.pathname : a.href;
         }
     };
+
+    /**
+     * Listener for dialogDefinition event
+     *
+     * @param {CKEDITOR.eventInfo} ev
+     */
+    function dialogDefinition (ev) {
+        if (ev.data.name !== 'media') {
+            return;
+        }
+
+        var button = ev.data.definition.contents[0].elements[1];
+        var call = function (data) {
+            if (data.src) {
+                var dialog = this.getDialog();
+
+                ['src', 'type', 'alt'].forEach(function (item) {
+                    if (!!data[item]) {
+                        dialog.getContentElement('info', item).setValue(data[item]);
+                    }
+                });
+            }
+        };
+
+        /**
+         * Supported APIs sorted by preference
+         */
+        if (!!ev.editor.plugins.mediabrowser) {
+            button.mediabrowser = call;
+        } else if (!!ev.editor.plugins.filebrowser) {
+            button.filebrowser = 'info:src';
+        }
+    }
 })(window, document, CKEDITOR);

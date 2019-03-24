@@ -1,125 +1,72 @@
 'use strict';
 
+/**
+ * Mediabrowser API
+ *
+ * @deprecated You can use the API plugin directly instead
+ * @see https://ckeditor.com/cke4/addon/api
+ */
 (function (window, document, CKEDITOR) {
-    /**
-     * Defaults
-     */
-    var defaults = {
-        container: ['hbox', 'vbox', 'fieldset']
-    };
-
     /**
      * Plugin
      */
-    CKEDITOR.plugins.add('mediabrowser', {});
+    CKEDITOR.plugins.add('mediabrowser', {requires: 'api'});
 
     /**
-     * Dialog definition listener
+     * Dialog definition
      */
-    CKEDITOR.on('dialogDefinition', function (ev) {
-        if (!!ev.editor.plugins.mediabrowser && !!ev.editor.config.mediabrowserUrl) {
-            var def = ev.data.definition;
-
-            for (var i = 0; i < def.contents.length; ++i) {
-                if (def.contents[i] && def.contents[i].elements) {
-                    findButtons(def.contents[i].elements);
-                }
-            }
-        }
-    });
+    CKEDITOR.on('dialogDefinition', dialogDefinition);
 
     /**
      * Public API
+     *
+     * @class
+     * @singleton
      */
     CKEDITOR.mediabrowser = {
-        popupFeatures: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
-            'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width,
-        open: function (url, callback) {
-            if (!url || typeof callback !== 'function') {
-                return;
-            }
-
-            var win = this.popup(url);
-            var origin;
-
-            try {
-                origin = win.origin || win.location.origin;
-            } catch (e) {
-                console.log(e);
-                origin = this.getOrigin(url);
-            }
-
-            window.addEventListener('message', function (ev) {
-                if (ev.origin === origin && ev.source === win) {
-                    callback(ev.data);
-                    win.close();
-                }
-            }, false);
+        /**
+         * Opens a mediabrowser window and executes given callback function when a message from the mediabrowser window
+         * is received and closes the browser window
+         *
+         * @param {string} url
+         * @param {function} call
+         */
+        open: function (url, call) {
+            CKEDITOR.api.browser(url, 'mediabrowser', call);
         },
-        popup: function (url) {
-            return window.open(url, 'mediabrowser', this.popupFeatures);
+
+        /**
+         * Opens a new mediabrowser window with given options
+         *
+         * @param {string} url
+         * @param {string|null} opts
+         *
+         * @return {Window}
+         */
+        popup: function (url, opts) {
+            return CKEDITOR.api.popup(url, 'mediabrowser', opts);
         },
+
+        /**
+         * Returns origin from given URL
+         *
+         * @param {string} url
+         *
+         * @return {string}
+         */
         getOrigin: function (url) {
-            var a = document.createElement('a');
-            a.href = url;
-
-            return a.origin;
+            return CKEDITOR.api.origin(url);
         }
     };
 
     /**
-     * Recursively finds and unhides button elements with a mediabrowser callback and sets the onClick callback
-     *
-     * @param {Array} items
-     */
-    function findButtons(items) {
-        if (!Array.isArray(items) || items.length <= 0) {
-            return;
-        }
-
-        items.forEach(function (item) {
-            if (isContainer(item)) {
-                findButtons(item.children);
-            } else if (isButton(item)) {
-                item.hidden = false;
-                item.onClick = onClick;
-            }
-        });
-    }
-
-    /**
-     * Indicates if given UI element is a container and has child elements
-     *
-     * @param {CKEDITOR.dialog.definition.uiElement} item
-     *
-     * @return {boolean}
-     */
-    function isContainer(item) {
-        return defaults.container.indexOf(item.type) >= 0 && item.children && item.children.length > 0;
-    }
-
-    /**
-     * Indicates if given UI element is a button with a mediabrowser callback
-     *
-     * @param {CKEDITOR.dialog.definition.uiElement} item
-     *
-     * @return {boolean}
-     */
-    function isButton(item) {
-        return item.type === 'button' && item.mediabrowser && typeof item.mediabrowser === 'function';
-    }
-
-    /**
-     * Button click listener
+     * Listener for dialogDefinition event
      *
      * @param {CKEDITOR.eventInfo} ev
      */
-    function onClick(ev) {
-        var dialog = ev.sender.getDialog();
-        var url = dialog.getParentEditor().config.mediabrowserUrl;
-
-        CKEDITOR.mediabrowser.open(url, function (data) {
-            ev.sender.mediabrowser.call(ev.sender, data);
-        });
+    function dialogDefinition (ev) {
+        if (!!ev.editor.plugins.mediabrowser && !!ev.editor.config.mediabrowserUrl) {
+            CKEDITOR.api.browserDialog(ev.editor.config.mediabrowserUrl, 'mediabrowser', 'mediabrowser', ev.data.definition);
+        }
     }
 })(window, document, CKEDITOR);

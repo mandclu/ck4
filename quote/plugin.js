@@ -1,12 +1,18 @@
 'use strict';
 
 (function (CKEDITOR) {
+    /**
+     * Plugin
+     */
     CKEDITOR.plugins.add('quote', {
         requires: 'widget',
         icons: 'quote',
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
+            /**
+             * Widget
+             */
             editor.widgets.add('quote', {
                 button: editor.lang.quote.title,
                 template: '<figure class="quote"><blockquote></blockquote><figcaption></figcaption></figure>',

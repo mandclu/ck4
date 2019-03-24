@@ -1,13 +1,23 @@
 'use strict';
 
 (function (CKEDITOR) {
+    /**
+     * DTD
+     */
     CKEDITOR.dtd['$editable']['summary'] = 1;
+
+    /**
+     * Plugin
+     */
     CKEDITOR.plugins.add('detail', {
         requires: 'widget',
         icons: 'detail',
         hidpi: true,
         lang: 'de,en,uk,ru',
         init: function (editor) {
+            /**
+             * Widget
+             */
             editor.widgets.add('detail', {
                 button: editor.lang.detail.title,
                 template: '<details><summary></summary><div class="content"></div></details>',

@@ -64,17 +64,6 @@
         },
 
         /**
-         * Sends a XMLHttpRequest with the HEAD method
-         *
-         * @param {string} url
-         *
-         * @return {string|null}
-         */
-        head: function (url) {
-            return CKEDITOR.api.request('HEAD', url, null);
-        },
-
-        /**
          * Sends a XMLHttpRequest with the POST method
          *
          * @param {string} url
@@ -87,7 +76,40 @@
         },
 
         /**
-         * Opens a browser window with given name and executes given callback function when a message from browser
+         * Sends a XMLHttpRequest with the HEAD method and returns given response headers as an object
+         *
+         * @param {string} url
+         * @param {string[]} headers
+         *
+         * @return {Object}
+         */
+        head: function (url, headers) {
+
+            if (!url || !Array.isArray(headers) || headers.length <= 0) {
+                return {};
+            }
+
+            var result = {};
+            var xhr = new XMLHttpRequest();
+
+            try {
+                xhr.open('HEAD', url, false);
+                xhr.send();
+
+                if (xhr.readyState === xhr.HEADERS_RECEIVED) {
+                    headers.forEach(function (item) {
+                        result[item] = xhr.getResponseHeader(item);
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+
+            return result;
+        },
+
+        /**
+         * Opens a browser window with given name and executes given callback function when a message from the browser
          * window is received and closes the browser window
          *
          * @param {string} url
@@ -122,37 +144,42 @@
          *
          * @param {string} url
          * @param {string} name
+         * @param {string} prop
          * @param {CKEDITOR.dialog.definition} def
          */
-        browserDialog: function (url, name, def) {
+        browserDialog: function (url, name, prop, def) {
             if (!!url && !!name && !!def.contents && Array.isArray(def.contents)) {
                 for (var i = 0; i < def.contents.length; ++i) {
                     if (def.contents[i] && def.contents[i].elements) {
-                        CKEDITOR.api.browserRegister(url, name, def.contents[i].elements);
+                        CKEDITOR.api.browserRegister(url, name, prop, def.contents[i].elements);
                     }
                 }
             }
         },
 
         /**
-         * Recursively finds and unhides button elements with a browser callback and sets the onClick callback
+         * Recursively finds and unhides all browser button elements and sets the onClick callback
+         *
+         * A browser button is a button element with a specific property `prop` that is a callback function. This
+         * callback function is later executed when the browser window sends a message.
          *
          * @param {string} url
          * @param {string} name
+         * @param {string} prop
          * @param {CKEDITOR.dialog.definition.uiElement[]} items
          */
-        browserRegister: function (url, name, items) {
+        browserRegister: function (url, name, prop, items) {
             if (!!url && !!name && Array.isArray(items)) {
                 items.forEach(function (item) {
-                    if (item.type === 'button' && item.browser && typeof item.browser === 'function') {
+                    if (item.type === 'button' && item.hasOwnProperty(prop) && typeof item[prop] === 'function') {
                         item.hidden = false;
                         item.onClick = function (ev) {
                             CKEDITOR.api.browser(url, name, function (data) {
-                                ev.sender.browser.call(ev.sender, data);
+                                ev.sender[prop].call(ev.sender, data);
                             });
                         };
                     } else if (defaults.container.indexOf(item.type) >= 0 && item.children && item.children.length > 0) {
-                        CKEDITOR.api.browserRegister(url, name, item.children);
+                        CKEDITOR.api.browserRegister(url, name, prop, item.children);
                     }
                 });
             }
