@@ -5,6 +5,7 @@
      * Defaults
      */
     var defaults = {
+        container: ['hbox', 'vbox', 'fieldset'],
         popup: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
             'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width
     };
@@ -114,6 +115,47 @@
                     win.close();
                 }
             }, false);
+        },
+
+        /**
+         * Initializes all browser buttons for given dialog definition
+         *
+         * @param {string} url
+         * @param {string} name
+         * @param {CKEDITOR.dialog.definition} def
+         */
+        browserDialog: function (url, name, def) {
+            if (!!url && !!name && !!def.contents && Array.isArray(def.contents)) {
+                for (var i = 0; i < def.contents.length; ++i) {
+                    if (def.contents[i] && def.contents[i].elements) {
+                        CKEDITOR.api.browserRegister(url, name, def.contents[i].elements);
+                    }
+                }
+            }
+        },
+
+        /**
+         * Recursively finds and unhides button elements with a browser callback and sets the onClick callback
+         *
+         * @param {string} url
+         * @param {string} name
+         * @param {CKEDITOR.dialog.definition.uiElement[]} items
+         */
+        browserRegister: function (url, name, items) {
+            if (!!url && !!name && Array.isArray(items)) {
+                items.forEach(function (item) {
+                    if (item.type === 'button' && item.browser && typeof item.browser === 'function') {
+                        item.hidden = false;
+                        item.onClick = function (ev) {
+                            CKEDITOR.api.browser(url, name, function (data) {
+                                ev.sender.browser.call(ev.sender, data);
+                            });
+                        };
+                    } else if (defaults.container.indexOf(item.type) >= 0 && item.children && item.children.length > 0) {
+                        CKEDITOR.api.browserRegister(url, name, item.children);
+                    }
+                });
+            }
         },
 
         /**
