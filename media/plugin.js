@@ -19,7 +19,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('media', {
-        requires: 'dialog,widget',
+        requires: 'api,dialog,widget',
         icons: 'media',
         hidpi: true,
         lang: 'de,en,uk,ru',
@@ -388,7 +388,10 @@
         /**
          * Supported APIs sorted by preference
          */
-        if (!!ev.editor.plugins.mediabrowser) {
+        if (!!ev.editor.plugins.browser && typeof ev.editor.config.mediaBrowser === 'string' && !!ev.editor.config.mediaBrowser) {
+            button.browser = call;
+            button.browserUrl = ev.editor.config.mediaBrowser;
+        } else if (!!ev.editor.plugins.mediabrowser) {
             button.mediabrowser = call;
         } else if (!!ev.editor.plugins.filebrowser) {
             button.filebrowser = 'info:src';
