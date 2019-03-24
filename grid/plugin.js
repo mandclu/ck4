@@ -1,14 +1,25 @@
 'use strict';
 
 (function (CKEDITOR) {
-    var allowed = ['block', 'div', 'figure', 'section'];
+    /**
+     * Defaults
+     */
+    var defaults = {
+        allowed: ['block', 'div', 'figure', 'section']
+    };
 
+    /**
+     * Plugin
+     */
     CKEDITOR.plugins.add('grid', {
         requires: 'widget',
         icons: 'grid',
         hidpi: true,
         lang: 'de,en',
         init: function (editor) {
+            /**
+             * Widget
+             */
             editor.widgets.add('grid', {
                 button: editor.lang.grid.title,
                 template: '<div class="grid"><div class="content"></div></div>',
@@ -39,7 +50,7 @@
                 downcast: function (el) {
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
-                        if (allowed.indexOf(item.name) >= 0 && (item.isEmpty || item.getHtml().trim())) {
+                        if (defaults.allowed.indexOf(item.name) >= 0 && (item.isEmpty || item.getHtml().trim())) {
                             el.add(item);
                         }
                     });

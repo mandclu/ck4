@@ -2,7 +2,7 @@
 
 (function (window, document, console, XMLHttpRequest, CKEDITOR) {
     /**
-     * Default options
+     * Defaults
      */
     var defaults = {
         popup: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
@@ -10,7 +10,7 @@
     };
 
     /**
-     * Plugin registration
+     * Plugin
      */
     CKEDITOR.plugins.add('api', {});
 
