@@ -13,7 +13,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('block', {
-        requires: 'api,dialog,widget',
+        requires: 'api,browser,dialog,widget',
         icons: 'block',
         hidpi: true,
         lang: 'de,en',
@@ -68,22 +68,19 @@
     /**
      * Dialog definition
      */
-    CKEDITOR.on('dialogDefinition', function (dev) {
-        if (dev.data.name !== 'block' || !dev.editor.config.blockBrowser) {
-            return;
-        }
-
-        var button = dev.data.definition.contents[0].elements[1];
-        button.hidden = false;
-        button.onClick = function (ev) {
-            CKEDITOR.api.browser(dev.editor.config.blockBrowser, 'block', function (data) {
+    CKEDITOR.on('dialogDefinition', function (ev) {
+        if (ev.data.name === 'block' && !!ev.editor.plugins.browser && typeof ev.editor.config.blockBrowser === 'string' && !!ev.editor.config.blockBrowser) {
+            var button = ev.data.definition.contents[0].elements[1];
+            button.hidden = false;
+            button.browser = function (data) {
                 if (!!data.id) {
-                    var dialog = ev.sender.getDialog();
+                    var dialog = this.getDialog();
                     dialog.getContentElement('info', 'id').setValue(data.id);
                     dialog.getContentElement('info', 'content').setValue(data.content || data.id);
                 }
-            });
-        };
+            };
+            button.browserUrl = ev.editor.config.blockBrowser;
+        }
     }, null, null, 1);
 
     /**
