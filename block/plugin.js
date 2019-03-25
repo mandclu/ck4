@@ -21,7 +21,7 @@
             /**
              * Config
              */
-            if (!editor.config.blockBrowser || editor.config.blockBrowser !== 'string') {
+            if (!editor.config.blockBrowser || typeof editor.config.blockBrowser !== 'string') {
                 editor.config.blockBrowser = null;
             }
 
