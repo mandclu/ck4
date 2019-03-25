@@ -22,11 +22,26 @@
                     },
                     caption: {
                         selector: 'figcaption',
-                        allowedContent: 'br em s strong sub sup u; a[!href]'
+                        allowedContent: {
+                            a: {
+                                attributes: {href: true},
+                                requiredAttributes: {href: true}
+                            },
+                            br: true,
+                            em: true,
+                            strong: true
+                        }
                     }
                 },
-                allowedContent: 'figure(!quote); blockquote; figcaption',
-                requiredContent: 'figure(quote); blockquote; figcaption',
+                allowedContent: {
+                    blockquote: true,
+                    figcaption: true,
+                    figure: {
+                        classes: {quote: true},
+                        requiredClasses: {quote: true}
+                    }
+                },
+                requiredContent: 'figure(quote)',
                 upcast: function (el) {
                     if (el.name === 'blockquote' && el.children.length > 0) {
                         var figure = new CKEDITOR.htmlParser.element('figure', {class: 'quote'});

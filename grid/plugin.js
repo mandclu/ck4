@@ -19,11 +19,23 @@
                 editables: {
                     content: {
                         selector: '.content',
-                        allowedContent: 'section figure p; block[!id]'
+                        allowedContent: {
+                            block: {
+                                attributes: {id: true},
+                                requiredAttributes: {id: true}
+                            },
+                            figure: true,
+                            p: true,
+                            section: true
+                        }
                     }
                 },
-                allowedContent: 'div(!grid); div(!content)',
-                requiredContent: 'div(grid); div(content)',
+                allowedContent: {
+                    div: {
+                        classes: {content: true, grid: true}
+                    }
+                },
+                requiredContent: 'div(grid)',
                 upcast: function (el) {
                     if (el.name !== 'div' || !el.hasClass('grid')) {
                         return false;

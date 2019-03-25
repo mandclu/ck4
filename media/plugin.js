@@ -6,13 +6,7 @@
      */
     var defaults = {
         align: {left: 'left', right: 'right'},
-        attr: ['alt', 'height', 'src', 'width'],
-        editables: {
-            caption: {
-                selector: 'figcaption',
-                allowedContent: 'br em s strong sub sup u; a[!href]'
-            }
-        }
+        attr: ['alt', 'height', 'src', 'width']
     };
 
     /**
@@ -31,9 +25,47 @@
                 button: editor.lang.media.title,
                 dialog: 'media',
                 template: '<figure class="image"><img /><figcaption></figcaption></figure>',
-                editables: defaults.editables,
-                allowedContent: 'figure(audio, iframe, image, video, left, right); a[!href]; audio[!src, controls]; iframe[!src, width, height, allowfullscreen]; img[!src, width, height, alt]; video[!src, width, height, controls]; figcaption',
-                requiredContent: 'figure; audio iframe img video[src]; figcaption',
+                editables: {
+                    caption: {
+                        selector: 'figcaption',
+                        allowedContent: {
+                            a: {
+                                attributes: {href: true},
+                                requiredAttributes: {href: true}
+                            },
+                            br: true,
+                            em: true,
+                            strong: true
+                        }
+                    }
+                },
+                allowedContent: {
+                    a: {
+                        attributes: {href: true},
+                        requiredAttributes: {href: true}
+                    },
+                    audio: {
+                        attributes: {controls: true, src: true},
+                        requiredAttributes: {controls: true, src: true}
+                    },
+                    figcaption: true,
+                    figure: {
+                        classes: {audio: true, iframe: true, image: true, left: true, right: true, video: true}
+                    },
+                    iframe: {
+                        attributes: {allowfullscreen: true, height: true, src: true, width: true},
+                        requiredAttributes: {src: true}
+                    },
+                    img: {
+                        attributes: {alt:true, height: true, src: true, width: true},
+                        requiredAttributes: {src: true}
+                    },
+                    video: {
+                        attributes: {controls: true, height: true, src: true, width: true},
+                        requiredAttributes: {src: true}
+                    }
+                },
+                requiredContent: 'figure',
                 defaults: {
                     align: '',
                     alt: '',
@@ -163,7 +195,7 @@
                         el.append(media, true);
                         caption = new CKEDITOR.dom.element('figcaption');
                         el.append(caption);
-                        widget.initEditable('caption', defaults.editables.caption);
+                        widget.initEditable('caption', widget.definition.editables.caption);
                         widget.wrapper.renameNode('div');
                         widget.wrapper.removeClass('cke_widget_inline');
                         widget.wrapper.addClass('cke_widget_block');
@@ -238,7 +270,36 @@
     /**
      * Dialog definition
      */
-    CKEDITOR.on('dialogDefinition', dialogDefinition, null, null, 1);
+    CKEDITOR.on('dialogDefinition', function (ev) {
+        if (ev.data.name !== 'media') {
+            return;
+        }
+
+        var button = ev.data.definition.contents[0].elements[1];
+        var call = function (data) {
+            if (data.src) {
+                var dialog = this.getDialog();
+
+                ['src', 'type', 'alt'].forEach(function (item) {
+                    if (!!data[item]) {
+                        dialog.getContentElement('info', item).setValue(data[item]);
+                    }
+                });
+            }
+        };
+
+        /**
+         * Supported APIs sorted by preference
+         */
+        if (!!ev.editor.plugins.browser && typeof ev.editor.config.mediaBrowser === 'string' && !!ev.editor.config.mediaBrowser) {
+            button.browser = call;
+            button.browserUrl = ev.editor.config.mediaBrowser;
+        } else if (!!ev.editor.plugins.mediabrowser) {
+            button.mediabrowser = call;
+        } else if (!!ev.editor.plugins.filebrowser) {
+            button.filebrowser = 'info:src';
+        }
+    }, null, null, 1);
 
     /**
      * Public API
@@ -361,40 +422,4 @@
             return a.origin === origin ? a.pathname : a.href;
         }
     };
-
-    /**
-     * Listener for dialogDefinition event
-     *
-     * @param {CKEDITOR.eventInfo} ev
-     */
-    function dialogDefinition (ev) {
-        if (ev.data.name !== 'media') {
-            return;
-        }
-
-        var button = ev.data.definition.contents[0].elements[1];
-        var call = function (data) {
-            if (data.src) {
-                var dialog = this.getDialog();
-
-                ['src', 'type', 'alt'].forEach(function (item) {
-                    if (!!data[item]) {
-                        dialog.getContentElement('info', item).setValue(data[item]);
-                    }
-                });
-            }
-        };
-
-        /**
-         * Supported APIs sorted by preference
-         */
-        if (!!ev.editor.plugins.browser && typeof ev.editor.config.mediaBrowser === 'string' && !!ev.editor.config.mediaBrowser) {
-            button.browser = call;
-            button.browserUrl = ev.editor.config.mediaBrowser;
-        } else if (!!ev.editor.plugins.mediabrowser) {
-            button.mediabrowser = call;
-        } else if (!!ev.editor.plugins.filebrowser) {
-            button.filebrowser = 'info:src';
-        }
-    }
 })(window, document, CKEDITOR);

@@ -25,8 +25,13 @@
                 button: editor.lang.block.title,
                 dialog: 'block',
                 template: '<div data-block=""></div>',
-                allowedContent: 'block[!id];',
-                requiredContent: 'block[id];',
+                allowedContent: {
+                    block: {
+                        attributes: {id: true},
+                        requiredAttributes: {id: true}
+                    }
+                },
+                requiredContent: 'block[id]',
                 upcast: function (el, data) {
                     if (el.name !== 'block') {
                         return false;

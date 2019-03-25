@@ -30,8 +30,8 @@
                         selector: '.content'
                     }
                 },
-                allowedContent: 'details summary',
-                requiredContent: 'details; summary',
+                allowedContent: {details: true, summary: true},
+                requiredContent: 'details',
                 upcast: function (el) {
                     if (el.name !== 'details') {
                         return false;
