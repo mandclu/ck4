@@ -5,7 +5,7 @@
      * Defaults
      */
     var defaults = {
-        allowed: ['block', 'div', 'figure', 'section']
+        allowed: ['block', 'figure', 'section']
     };
 
     /**
@@ -26,7 +26,7 @@
                 editables: {
                     content: {
                         selector: '.content',
-                        allowedContent: 'section figure p; block[!id]; div[!data-block]'
+                        allowedContent: 'section figure p; block[!id]'
                     }
                 },
                 allowedContent: 'div(!grid); div(!content)',
