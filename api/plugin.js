@@ -5,6 +5,7 @@
      * Defaults
      */
     var defaults = {
+        container: ['hbox', 'vbox', 'fieldset'],
         popup: 'alwaysRaised=yes,dependent=yes,height=' + window.screen.height + ',location=no,menubar=no,' +
             'minimizable=no,modal=yes,resizable=yes,scrollbars=yes,toolbar=no,width=' + window.screen.width
     };
@@ -137,6 +138,22 @@
             a.href = url;
 
             return a.origin;
+        },
+
+        /**
+         * Applies a callback function on all UI elements in given dialog definition
+         *
+         * @param {CKEDITOR.dialog.definition} def
+         * @param {Function} call
+         */
+        ui: function (def, call) {
+            if (def.hasOwnProperty('contents') && Array.isArray(def.contents) && def.contents.length > 0) {
+                for (var i = 0; i < def.contents.length; ++i) {
+                    if (def.contents[i] && def.contents[i].elements) {
+                       uiApply(def.contents[i].elements, call);
+                    }
+                }
+            }
         }
     };
 
@@ -184,5 +201,23 @@
         }
 
         return null;
+    }
+
+    /**
+     * Recursively finds all UI elements considering container elements and applies given callback function on them
+     *
+     * @param {CKEDITOR.dialog.definition.uiElement[]} items
+     * @param {Function} call
+     */
+    function uiApply(items, call) {
+        if (Array.isArray(items) || typeof call === 'function') {
+            items.forEach(function (item) {
+                if (item.hasOwnProperty('type') && defaults.container.indexOf(item.type) >= 0) {
+                    uiApply(item.children, call);
+                } else {
+                    call(item);
+                }
+            });
+        }
     }
 })(window, document, console, XMLHttpRequest, CKEDITOR);
