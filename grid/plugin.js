@@ -2,13 +2,6 @@
 
 (function (CKEDITOR) {
     /**
-     * Defaults
-     */
-    var defaults = {
-        allowed: ['block', 'figure', 'section']
-    };
-
-    /**
      * Plugin
      */
     CKEDITOR.plugins.add('grid', {
@@ -50,7 +43,7 @@
                 downcast: function (el) {
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
-                        if (defaults.allowed.indexOf(item.name) >= 0 && (item.isEmpty || item.getHtml().trim())) {
+                        if (item.name !== 'p' && (item.isEmpty || item.getHtml().trim())) {
                             el.add(item);
                         }
                     });
