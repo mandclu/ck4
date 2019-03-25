@@ -22,33 +22,14 @@
      */
     CKEDITOR.api = {
         /**
-         * Sends a XMLHttpRequest with given method and returns the response as text
+         * Sends a XMLHttpRequest with the DELETE method
          *
-         * @param {string} method
          * @param {string} url
-         * @param {string|null} body
          *
          * @return {string|null}
          */
-         request: function (method, url, body) {
-            if (!method || !url) {
-                return null;
-            }
-
-            var xhr = new XMLHttpRequest();
-
-            try {
-                xhr.open(method, url, false);
-                xhr.send(body);
-
-                if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-                    return xhr.responseText;
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
-            return null;
+        delete: function (url) {
+            return request('DELETE', url);
         },
 
         /**
@@ -59,7 +40,19 @@
          * @return {string|null}
          */
         get: function (url) {
-            return CKEDITOR.api.request('GET', url, null);
+            return request('GET', url);
+        },
+
+        /**
+         * Sends a XMLHttpRequest with the HEAD method and returns given response headers as an object
+         *
+         * @param {string} url
+         * @param {Object} header
+         *
+         * @return {Object|null}
+         */
+        head: function (url, header) {
+            return request('HEAD', url, null, header);
         },
 
         /**
@@ -67,44 +60,25 @@
          *
          * @param {string} url
          * @param {string} body
+         * @param {Object} [header = null]
          *
          * @return {string|null}
          */
-        post: function (url, body) {
-            return CKEDITOR.api.request('POST', url, body);
+        post: function (url, body, header) {
+            return request('POST', url, body, header);
         },
 
         /**
-         * Sends a XMLHttpRequest with the HEAD method and returns given response headers as an object
+         * Sends a XMLHttpRequest with the PUT method
          *
          * @param {string} url
-         * @param {string[]} headers
+         * @param {string} body
+         * @param {Object} [header = null]
          *
-         * @return {Object}
+         * @return {string|null}
          */
-        head: function (url, headers) {
-
-            if (!url || !Array.isArray(headers) || headers.length <= 0) {
-                return {};
-            }
-
-            var result = {};
-            var xhr = new XMLHttpRequest();
-
-            try {
-                xhr.open('HEAD', url, false);
-                xhr.send();
-
-                if (xhr.readyState === xhr.HEADERS_RECEIVED) {
-                    headers.forEach(function (item) {
-                        result[item] = xhr.getResponseHeader(item);
-                    });
-                }
-            } catch (e) {
-                console.log(e);
-            }
-
-            return result;
+        put: function (url, body, header) {
+            return request('PUT', url, body, header);
         },
 
         /**
@@ -120,7 +94,7 @@
                 return;
             }
 
-            var win = CKEDITOR.api.popup(url, name, null);
+            var win = CKEDITOR.api.popup(url, name);
             var origin;
 
             try {
@@ -143,7 +117,7 @@
          *
          * @param {string} url
          * @param {string} name
-         * @param {string|null} opts
+         * @param {string} [opts = null]
          *
          * @return {Window}
          */
@@ -165,4 +139,50 @@
             return a.origin;
         }
     };
+
+    /**
+     * Sends a XMLHttpRequest with given method and returns the response as text
+     *
+     * @param {string} method
+     * @param {string} url
+     * @param {string|null} [body = null]
+     * @param {Object|null} [header = {}]
+     *
+     * @return {Object|string|null}
+     */
+     function request(method, url, body, header) {
+        if (!method || !url || method === 'HEAD' && typeof header === 'undefined') {
+            return null;
+        }
+
+        body = typeof body === 'undefined' ? null : body;
+        header = typeof header === 'undefined' || header !== Object(header) ? {} : header;
+        var xhr = new XMLHttpRequest();
+
+        if (method !== 'HEAD') {
+            Object.getOwnPropertyNames(header).forEach(function (name) {
+                xhr.setRequestHeader(name, header[name]);
+            });
+        }
+
+        try {
+            xhr.open(method, url, false);
+            xhr.send(body);
+
+            if (method === 'HEAD' && xhr.readyState === xhr.HEADERS_RECEIVED) {
+                Object.getOwnPropertyNames(header).forEach(function (name) {
+                    header[name] = xhr.getResponseHeader(name);
+                });
+                return header;
+            }
+
+            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+                return xhr.responseText;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        return null;
+    }
 })(window, document, console, XMLHttpRequest, CKEDITOR);

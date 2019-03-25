@@ -319,7 +319,7 @@
          * @return {string}
          */
         getTypeFromUrl: function (url) {
-            var contentType = CKEDITOR.api.head(url, ['content-type'])['content-type'] || null;
+            var contentType = CKEDITOR.api.head(url, {'content-type': null})['content-type'] || null;
 
             if (!!contentType) {
                 var type = contentType.split(';')[0].trim();
