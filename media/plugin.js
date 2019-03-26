@@ -57,7 +57,7 @@
                         requiredAttributes: {src: true}
                     },
                     img: {
-                        attributes: {alt:true, height: true, src: true, width: true},
+                        attributes: {alt: true, height: true, src: true, width: true},
                         requiredAttributes: {src: true}
                     },
                     video: {
@@ -103,7 +103,7 @@
                         el.add(new CKEDITOR.htmlParser.element('figcaption'));
                     }
 
-                    return crit(el) && el.children.length === 2  && (med(el.children[0]) || link(el.children[0])) && el.children[1].name === 'figcaption'
+                    return crit(el) && el.children.length === 2 && (med(el.children[0]) || link(el.children[0])) && el.children[1].name === 'figcaption'
                         || !crit(el) && med(el) && !el.getAscendant(crit);
                 },
                 downcast: function (el) {
@@ -275,7 +275,42 @@
             return;
         }
 
-        var button = ev.data.definition.contents[0].elements[1];
+        /**
+         * Source input
+         */
+        var src = ev.data.definition.contents[0].elements[0];
+        src.onChange = function () {
+            var type = '';
+
+            if (this.getValue()) {
+                type = CKEDITOR.api.media.fromUrl(this.getValue()) || '';
+            }
+
+            this.getDialog().getContentElement('info', 'type').setValue(type);
+        };
+
+        /**
+         * Type select
+         */
+        var type = ev.data.definition.contents[0].elements[2];
+        type.items = [[ev.editor.lang.common.notSet, '']].concat(CKEDITOR.api.media.all().map(function (item) {
+            return [ev.editor.lang.media[item], item];
+        }).sort(function (a, b) {
+            if (a[0] < b[0]) {
+                return -1;
+            }
+
+            if (a[0] > b[0]) {
+                return 1;
+            }
+
+            return 0;
+        }));
+
+        /**
+         * Browse button
+         */
+        var browse = ev.data.definition.contents[0].elements[1];
         var call = function (data) {
             if (data.src) {
                 var dialog = this.getDialog();
@@ -288,16 +323,14 @@
             }
         };
 
-        /**
-         * Supported APIs sorted by preference
-         */
+        // Supported APIs sorted by preference
         if (!!ev.editor.plugins.browser && typeof ev.editor.config.mediaBrowser === 'string' && !!ev.editor.config.mediaBrowser) {
-            button.browser = call;
-            button.browserUrl = ev.editor.config.mediaBrowser;
+            browse.browser = call;
+            browse.browserUrl = ev.editor.config.mediaBrowser;
         } else if (!!ev.editor.plugins.mediabrowser) {
-            button.mediabrowser = call;
+            browse.mediabrowser = call;
         } else if (!!ev.editor.plugins.filebrowser) {
-            button.filebrowser = 'info:src';
+            browse.filebrowser = 'info:src';
         }
     }, null, null, 1);
 })(window, document, CKEDITOR);

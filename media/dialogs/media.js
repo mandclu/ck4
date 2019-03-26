@@ -4,19 +4,6 @@
     CKEDITOR.dialog.add('media', function (editor) {
         var lang = editor.lang.media;
         var common = editor.lang.common;
-        var types = [[common.notSet, '']].concat(CKEDITOR.api.media.all().map(function (item) {
-            return [lang[item], item];
-        }).sort(function (a, b) {
-            if (a[0] < b[0]) {
-                return -1;
-            }
-
-            if (a[0] > b[0]) {
-                return 1;
-            }
-
-            return 0;
-        }));
 
         return {
             title: lang.title,
@@ -38,16 +25,7 @@
                             commit: function (widget) {
                                 widget.setData('src', this.getValue());
                             },
-                            validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired),
-                            onChange: function () {
-                                var type = '';
-
-                                if (this.getValue()) {
-                                    type = CKEDITOR.api.media.fromUrl(this.getValue()) || '';
-                                }
-
-                                this.getDialog().getContentElement('info', 'type').setValue(type);
-                            }
+                            validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired)
                         },
                         {
                             id: 'browse',
@@ -59,7 +37,6 @@
                             id: 'type',
                             type: 'select',
                             label: lang.type,
-                            items: types,
                             setup: function (widget) {
                                 this.setValue(widget.data.type);
                             },
