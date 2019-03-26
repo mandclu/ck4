@@ -48,12 +48,13 @@
                         return false;
                     }
 
-                    if (!el.attributes['id']) {
-                        return new CKEDITOR.htmlParser.text('');
+                    if (!(data.id = el.attributes['id']) || !!editor.config.blockApi && !(data.content = get(editor.config.blockApi, data.id))) {
+                        var text = new CKEDITOR.htmlParser.text('');
+                        el.replaceWith(text);
+
+                        return text;
                     }
 
-                    data.id = el.attributes['id'];
-                    data.content = get(editor.config.blockApi, data.id);
                     var div = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
                     el.replaceWith(div);
 

@@ -56,7 +56,10 @@
                     }
 
                     if (el.children.length <= 0 || el.children[0].name !== 'blockquote') {
-                        return new CKEDITOR.htmlParser.text('');
+                        var text = new CKEDITOR.htmlParser.text('');
+                        el.replaceWith(text);
+
+                        return text;
                     }
 
                     // Caption
