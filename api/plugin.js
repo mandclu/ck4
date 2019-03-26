@@ -113,7 +113,7 @@
              * @return {string|null}
              */
             fromElement: function (element) {
-                var types = CKEDITOR.api.media.all();
+                var types = Object.getOwnPropertyNames(defaults.media);
 
                 for (var i = 0; i < types.length; ++i) {
                     if (defaults.media[types[i]].element === element) {
@@ -136,7 +136,7 @@
 
                 if (!!contentType) {
                     var type = contentType.split(';')[0].trim();
-                    var types = CKEDITOR.api.media.all();
+                    var types = Object.getOwnPropertyNames(defaults.media);
 
                     for (var i = 0; i < types.length; ++i) {
                         if (defaults.media[types[i]].mime.indexOf(type) >= 0) {
