@@ -21,7 +21,7 @@
                 if (item.type === 'button' && item.hasOwnProperty('mediabrowser') && typeof item.mediabrowser === 'function') {
                     item.hidden = false;
                     item.onClick = function (e) {
-                        CKEDITOR.api.win.browser(ev.editor.config.mediabrowserUrl, function (data) {
+                        CKEDITOR.api.browser(ev.editor.config.mediabrowserUrl, function (data) {
                             e.sender.mediabrowser.call(e.sender, data);
                         });
                     };

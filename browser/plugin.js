@@ -22,7 +22,7 @@
                 if (item.type === 'button' && typeof item.browser === 'function' && typeof item.browserUrl === 'string' && !!item.browserUrl) {
                     item.hidden = false;
                     item.onClick = function (ev) {
-                        CKEDITOR.api.win.browser(item.browserUrl, function (data) {
+                        CKEDITOR.api.browser(item.browserUrl, function (data) {
                             ev.sender.browser.call(ev.sender, data);
                         });
                     };
