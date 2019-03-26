@@ -1,6 +1,6 @@
 'use strict';
 
-(function (window, document, console, XMLHttpRequest, CKEDITOR) {
+(function (window, document, CKEDITOR) {
     /**
      * Defaults
      */
@@ -324,4 +324,4 @@
             });
         }
     }
-})(window, document, console, XMLHttpRequest, CKEDITOR);
+})(window, document, CKEDITOR);
