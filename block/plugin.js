@@ -90,6 +90,9 @@
             return;
         }
 
+        /**
+         * ID input
+         */
         var id = ev.data.definition.contents[0].elements[0];
         id.onLoad = function () {
             var dialog = this.getDialog();
@@ -99,10 +102,13 @@
             });
         };
 
+        /**
+         * Browse button
+         */
         if (!!ev.editor.plugins.browser && !!ev.editor.config.blockBrowser) {
-            var button = ev.data.definition.contents[0].elements[1];
-            button.hidden = false;
-            button.browser = function (data) {
+            var browse = ev.data.definition.contents[0].elements[1];
+            browse.hidden = false;
+            browse.browser = function (data) {
                 if (!!data.id && !!data.content) {
                     var dialog = this.getDialog();
                     ['id', 'content'].forEach(function (item) {
@@ -110,7 +116,7 @@
                     });
                 }
             };
-            button.browserUrl = ev.editor.config.blockBrowser;
+            browse.browserUrl = ev.editor.config.blockBrowser;
         }
     }, null, null, 1);
 
