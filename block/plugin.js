@@ -102,10 +102,11 @@
             var button = ev.data.definition.contents[0].elements[1];
             button.hidden = false;
             button.browser = function (data) {
-                if (!!data.id) {
+                if (!!data.id && !!data.content) {
                     var dialog = this.getDialog();
-                    dialog.getContentElement('info', 'id').setValue(data.id);
-                    dialog.getContentElement('info', 'content').setValue(data.content || data.id);
+                    ['id', 'content'].forEach(function (item) {
+                        dialog.getContentElement('info', item).setValue(data[item]);
+                    });
                 }
             };
             button.browserUrl = ev.editor.config.blockBrowser;
@@ -125,6 +126,6 @@
             return CKEDITOR.api.xhr.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
         }
 
-        return id;
+        return '';
     }
 })(CKEDITOR);
