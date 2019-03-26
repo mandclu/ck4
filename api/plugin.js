@@ -85,12 +85,10 @@
          * @param {Function} call
          */
         dialog: function (def, call) {
-            if (def.hasOwnProperty('contents') && Array.isArray(def.contents) && def.contents.length > 0) {
-                for (var i = 0; i < def.contents.length; ++i) {
-                    if (def.contents[i] && def.contents[i].elements) {
-                       dialogApply(def.contents[i].elements, call);
-                    }
-                }
+            if (def.hasOwnProperty('contents') && Array.isArray(def.contents) && def.contents.length > 0 && typeof call === 'function') {
+                def.contents.forEach(function (item) {
+                    dialogApply(item.elements, call);
+                });
             }
         },
 
@@ -314,7 +312,7 @@
      * @param {Function} call
      */
     function dialogApply(items, call) {
-        if (Array.isArray(items) || typeof call === 'function') {
+        if (Array.isArray(items) && typeof call === 'function') {
             items.forEach(function (item) {
                 if (item.hasOwnProperty('type') && defaults.container.indexOf(item.type) >= 0) {
                     dialogApply(item.children, call);
