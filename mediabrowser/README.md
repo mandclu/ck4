@@ -2,10 +2,7 @@
 
 @todo Needs update, the following is not up to date
 
-CKEDITOR.mediabrowser public api removed, use CKEDITOR.api instead
-CKEDITOR.mediabrowser.open => CKEDITOR.api.browser
-CKEDITOR.mediabrowser.popup => CKEDITOR.api.popup
-CKEDITOR.mediabrowser.getOrigin => CKEDITOR.api.origin
+mediabrowser public api merged into api plugin
 
 This plugin provides a minimal media browser API as an alternative to the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser) and does not care about advanced features like file uploads, so stick with the [filebrowser plugin](https://ckeditor.com/cke4/addon/filebrowser) if you need those.
 

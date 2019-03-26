@@ -4,7 +4,7 @@
     CKEDITOR.dialog.add('media', function (editor) {
         var lang = editor.lang.media;
         var common = editor.lang.common;
-        var types = [[common.notSet, '']].concat(CKEDITOR.media.getTypes().map(function (item) {
+        var types = [[common.notSet, '']].concat(CKEDITOR.api.media.all().map(function (item) {
             return [lang[item], item];
         }).sort(function (a, b) {
             if (a[0] < b[0]) {
@@ -40,7 +40,12 @@
                             },
                             validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired),
                             onChange: function () {
-                                var type = this.getValue() ? CKEDITOR.media.getTypeFromUrl(this.getValue()) : '';
+                                var type = '';
+
+                                if (this.getValue()) {
+                                    type = CKEDITOR.api.media.fromUrl(this.getValue()) || '';
+                                }
+
                                 this.getDialog().getContentElement('info', 'type').setValue(type);
                             }
                         },

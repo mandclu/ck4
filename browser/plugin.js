@@ -18,11 +18,11 @@
      */
     CKEDITOR.on('dialogDefinition', function (ev) {
         if (!!ev.editor.plugins.browser) {
-            CKEDITOR.api.ui(ev.data.definition, function (item) {
+            CKEDITOR.api.dialog(ev.data.definition, function (item) {
                 if (item.type === 'button' && typeof item.browser === 'function' && typeof item.browserUrl === 'string' && !!item.browserUrl) {
                     item.hidden = false;
                     item.onClick = function (ev) {
-                        CKEDITOR.api.browser(item.browserUrl, 'browser', function (data) {
+                        CKEDITOR.api.win.browser(item.browserUrl, function (data) {
                             ev.sender.browser.call(ev.sender, data);
                         });
                     };

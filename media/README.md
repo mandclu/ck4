@@ -1,6 +1,7 @@
 # Media Widget
 
 @todo Needs update, the following is not up to date
+media public api merged into api plugin
 
 This media widget can embed image, audio, video and iframe elements solely with their corresponding tags or wrapped within a figure element optionally with a caption. 
 
@@ -9,6 +10,8 @@ In case the media element is wrapped within a figure element, this widget will a
 ## Supported browser APIs
 
 If you have installed a file browser that uses the API of the [mediabrowser add-on](https://ckeditor.com/cke4/addon/mediabrowser) or the [filebrowser add-on](https://ckeditor.com/cke4/addon/filebrowser), the _Browse server_ button will appear. This widget itself does not provide any file browser.
+
+Note: This plugin would actually not need any of these APIs, but uses them to allow you to re-use your existing filebrowser implementation. 
 
 ### [Browser plugin](https://ckeditor.com/cke4/addon/browser)
 

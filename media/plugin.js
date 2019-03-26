@@ -78,7 +78,7 @@
                 },
                 upcast: function (el) {
                     var cls = function (e) {
-                        var types = CKEDITOR.media.getTypes();
+                        var types = CKEDITOR.api.media.all();
 
                         for (var i = 0; i < types.length; ++i) {
                             if (e.hasClass(types[i])) {
@@ -92,7 +92,7 @@
                         return e.name === 'figure' && cls(e);
                     };
                     var med = function (e) {
-                        return !!CKEDITOR.media.getTypeFromElement(e.name);
+                        return !!CKEDITOR.api.media.fromElement(e.name);
                     };
                     var link = function (e) {
                         return e.name === 'a' && e.children.length === 1 && med(e.children[0]);
@@ -146,8 +146,8 @@
 
                     // Media
                     if (media.hasAttribute('src')) {
-                        media.setAttribute('src', CKEDITOR.media.getUrl(media.getAttribute('src')));
-                        widget.setData('type', CKEDITOR.media.getTypeFromElement(media.getName()));
+                        media.setAttribute('src', CKEDITOR.api.url.root(media.getAttribute('src')));
+                        widget.setData('type', CKEDITOR.api.media.fromElement(media.getName()));
                     }
 
                     defaults.attr.forEach(function (item) {
@@ -171,11 +171,11 @@
                     var name;
                     var caption = null;
 
-                    if (!widget.data.src || !type || !(name = CKEDITOR.media.getTypeElement(type))) {
+                    if (!widget.data.src || !type || !(name = CKEDITOR.api.media.element(type))) {
                         return;
                     }
 
-                    CKEDITOR.media.getTypes().concat([defaults.align.left, defaults.align.right]).forEach(function (item) {
+                    CKEDITOR.api.media.all().concat([defaults.align.left, defaults.align.right]).forEach(function (item) {
                         el.removeClass(item);
                     });
 
@@ -300,126 +300,4 @@
             button.filebrowser = 'info:src';
         }
     }, null, null, 1);
-
-    /**
-     * Public API
-     *
-     * @class
-     * @singleton
-     */
-    CKEDITOR.media = {
-        /**
-         * Types
-         */
-        types: {
-            audio: {
-                element: 'audio',
-                mime: [
-                    'audio/aac', 'audio/flac', 'audio/mp3', 'audio/mpeg', 'audio/mpeg3', 'audio/ogg', 'audio/wav', 'audio/wave', 'audio/webm',
-                    'audio/x-aac', 'audio/x-flac', 'audio/x-mp3', 'audio/x-mpeg', 'audio/x-mpeg3', 'audio/x-pn-wav', 'audio/x-wav'
-                ]
-            },
-            iframe: {
-                element: 'iframe',
-                mime: ['text/html']
-            },
-            image: {
-                element: 'img',
-                mime: ['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/webp']
-            },
-            video: {
-                element: 'video',
-                mime: ['video/mp4', 'video/ogg', 'video/webm']
-            }
-        },
-
-        /**
-         * Returns all type names
-         *
-         * @return {string[]}
-         */
-        getTypes: function () {
-            return Object.getOwnPropertyNames(CKEDITOR.media.types);
-        },
-
-        /**
-         * Indicates if given type exists
-         *
-         * @param {string} type
-         *
-         * @return {boolean}
-         */
-        hasType: function (type) {
-            return CKEDITOR.media.types.hasOwnProperty(type);
-        },
-
-        /**
-         * Determines type from HTML element
-         *
-         * @param {string} element
-         *
-         * @return {string|null}
-         */
-        getTypeFromElement: function (element) {
-            var types = CKEDITOR.media.getTypes();
-
-            for (var i = 0; i < types.length; ++i) {
-                if (CKEDITOR.media.types[types[i]].element === element) {
-                    return types[i];
-                }
-            }
-
-            return null;
-        },
-
-        /**
-         * Determines type from URL by trying to map the content
-         *
-         * @param {string} url
-         *
-         * @return {string}
-         */
-        getTypeFromUrl: function (url) {
-            var contentType = CKEDITOR.api.head(url, {'content-type': null})['content-type'] || null;
-
-            if (!!contentType) {
-                var type = contentType.split(';')[0].trim();
-                var types = CKEDITOR.media.getTypes();
-
-                for (var i = 0; i < types.length; ++i) {
-                    if (CKEDITOR.media.types[types[i]].mime.indexOf(type) >= 0) {
-                        return types[i];
-                    }
-                }
-            }
-
-            return '';
-        },
-
-        /**
-         * Returns HTML element for given type
-         *
-         * @param {string} type
-         *
-         * @return {string|null}
-         */
-        getTypeElement: function (type) {
-            return CKEDITOR.media.hasType(type) ? CKEDITOR.media.types[type].element : null;
-        },
-
-        /**
-         * Transforms an absolute URL to an internal one, i.e. only returns the pathname, if it has the same origin
-         *
-         * @param {string} url
-         *
-         * @return {string}
-         */
-        getUrl: function (url) {
-            var a = document.createElement('a');
-            var origin = window.origin || window.location.origin;
-            a.href = url;
-
-            return a.origin === origin ? a.pathname : a.href;
-        }
-    };
 })(window, document, CKEDITOR);

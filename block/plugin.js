@@ -122,7 +122,7 @@
      */
     function get(url, id) {
         if (!!url && !!id) {
-            return CKEDITOR.api.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
+            return CKEDITOR.api.xhr.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
         }
 
         return id;
