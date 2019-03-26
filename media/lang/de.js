@@ -9,7 +9,7 @@
         image: 'Bild',
         info: 'Info',
         link: 'Link',
-        title: 'Medien - Bild, Audio, Video, Iframe',
+        title: 'Media - Bild, Audio, Video, Iframe',
         type: 'Typ',
         validateRequired: 'Dieses Feld ist erforderlich',
         video: 'Video'
