@@ -87,7 +87,9 @@
         dialog: function (def, call) {
             if (def.hasOwnProperty('contents') && Array.isArray(def.contents) && def.contents.length > 0 && typeof call === 'function') {
                 def.contents.forEach(function (item) {
-                    dialogApply(item.elements, call);
+                    if (!!item && Array.isArray(item.elements) && item.elements.length > 0) {
+                        dialogApply(item.elements, call);
+                    }
                 });
             }
         },
