@@ -43,6 +43,10 @@
                     }
                 },
                 requiredContent: 'block[id]',
+                defaults: {
+                    content: '',
+                    id: ''
+                },
                 upcast: function (el, data) {
                     if (el.name !== 'block') {
                         return false;
