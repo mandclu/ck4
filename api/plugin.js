@@ -198,6 +198,28 @@
             },
 
             /**
+             * Checks if given element is a media element
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {Boolean}
+             */
+            isMediaElement: function (el) {
+                return !!el && !!CKEDITOR.api.media.fromElement(el.name);
+            },
+
+            /**
+             * Checks if given element is a link with a media element as only child
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {Boolean}
+             */
+            isMediaLink: function (el) {
+                return !!el && el.name === 'a' && el.children.length === 1 && CKEDITOR.api.parser.isMediaElement(el.children[0])
+            },
+
+            /**
              * Indicates if element is removable because it is not en empty element and its inner HTML is empty
              *
              * @param {CKEDITOR.htmlParser.element} el

@@ -77,21 +77,25 @@
                     width: ''
                 },
                 upcast: function (el) {
-                    var med = function (e) {
-                        return !!CKEDITOR.api.media.fromElement(e.name);
-                    };
-                    var link = function (e) {
-                        return e.name === 'a' && e.children.length === 1 && med(e.children[0]);
-                    };
-                    var isFigure = CKEDITOR.api.parser.isMediaFigure(el);
+                    if (CKEDITOR.api.parser.isMediaElement(el) && !el.getAscendant(CKEDITOR.api.parser.isMediaFigure)) {
+                        return true;
+                    }
 
-                    // Add missing caption
-                    if (isFigure && el.children.length === 1) {
+                    if (!CKEDITOR.api.parser.isMediaFigure(el)
+                        || el.children.length < 1
+                        || !CKEDITOR.api.parser.isMediaElement(el.children[0]) && !CKEDITOR.api.parser.isMediaLink(el.children[0])
+                    ) {
+                        return false;
+                    }
+
+                    // Caption
+                    if (el.children.length < 2 || el.children[1].name !== 'figcaption') {
                         el.add(new CKEDITOR.htmlParser.element('figcaption'));
                     }
 
-                    return isFigure && el.children.length === 2 && (med(el.children[0]) || link(el.children[0])) && el.children[1].name === 'figcaption'
-                        || !isFigure && med(el) && !el.getAscendant(CKEDITOR.api.parser.isMediaFigure);
+                    el.children = el.children.slice(0, 2);
+
+                    return true;
                 },
                 downcast: function (el) {
                     if (el.name === 'figure') {
