@@ -77,34 +77,21 @@
                     width: ''
                 },
                 upcast: function (el) {
-                    var cls = function (e) {
-                        var types = CKEDITOR.api.media.all();
-
-                        for (var i = 0; i < types.length; ++i) {
-                            if (e.hasClass(types[i])) {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    };
-                    var crit = function (e) {
-                        return e.name === 'figure' && cls(e);
-                    };
                     var med = function (e) {
                         return !!CKEDITOR.api.media.fromElement(e.name);
                     };
                     var link = function (e) {
                         return e.name === 'a' && e.children.length === 1 && med(e.children[0]);
                     };
+                    var isFigure = !!CKEDITOR.api.parser.isMediaFigure(el);
 
                     // Add missing caption
-                    if (crit(el) && el.children.length === 1) {
+                    if (isFigure && el.children.length === 1) {
                         el.add(new CKEDITOR.htmlParser.element('figcaption'));
                     }
 
-                    return crit(el) && el.children.length === 2 && (med(el.children[0]) || link(el.children[0])) && el.children[1].name === 'figcaption'
-                        || !crit(el) && med(el) && !el.getAscendant(crit);
+                    return isFigure && el.children.length === 2 && (med(el.children[0]) || link(el.children[0])) && el.children[1].name === 'figcaption'
+                        || !isFigure && med(el) && !el.getAscendant(CKEDITOR.api.parser.isMediaFigure);
                 },
                 downcast: function (el) {
                     if (el.name === 'figure') {
