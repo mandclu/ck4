@@ -163,6 +163,42 @@
         },
 
         /**
+         * Parser API
+         */
+        parser: {
+            /**
+             * Checks if element has one of given CSS classes set and returns first found class
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             * @param {string[]} classes
+             *
+             * @return {string|null}
+             */
+            hasClass: function (el, classes) {
+                if (!el || typeof el.hasClass !== 'function' || !Array.isArray(classes)) {
+                    return null;
+                }
+
+                var call = function (item) {
+                    return el.hasClass(item);
+                };
+
+                return classes.find(call) || null;
+            },
+
+            /**
+             * Checks if element is a `figure` and has one of the CSS classes corresponding to a media type
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {string|null}
+             */
+            isMediaFigure: function (el) {
+                return el && el.name === 'figure' && CKEDITOR.api.parser.hasClass(el, Object.getOwnPropertyNames(defaults.media));
+            }
+        },
+
+        /**
          * URL API
          */
         url: {
