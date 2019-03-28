@@ -5,7 +5,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('quote', {
-        requires: 'widget',
+        requires: 'api,widget',
         icons: 'quote',
         hidpi: true,
         lang: 'de,en',
@@ -75,11 +75,7 @@
                     // Quote
                     el.children[0].attributes = [];
                     el.children[0].setHtml(this.editables.quote.getData());
-                    el.children[0].children.forEach(function (item) {
-                        if (!item.isEmpty && !item.getHtml().trim()) {
-                            item.remove();
-                        }
-                    });
+                    el.children[0].children.forEach(CKEDITOR.api.parser.remove);
 
                     if (!el.children[0].getHtml().trim()) {
                         return new CKEDITOR.htmlParser.text('');

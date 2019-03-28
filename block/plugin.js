@@ -127,10 +127,10 @@
     /**
      * Returns content from API
      *
-     * @param {string} url
-     * @param {string} id
+     * @param {String} url
+     * @param {String} id
      *
-     * @return {string}
+     * @return {String}
      */
     function get(url, id) {
         if (!!url && !!id) {

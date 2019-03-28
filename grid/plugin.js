@@ -5,7 +5,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('grid', {
-        requires: 'widget',
+        requires: 'api,widget',
         icons: 'grid',
         hidpi: true,
         lang: 'de,en',
@@ -58,8 +58,8 @@
                 downcast: function (el) {
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
-                        if (item.name !== 'p' && (item.isEmpty || item.getHtml().trim())) {
-                            el.add(item);
+                        if (item.name !== 'p') {
+                            CKEDITOR.api.parser.add(item, el);
                         }
                     });
                     el.children[0].remove();

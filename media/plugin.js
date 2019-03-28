@@ -83,7 +83,7 @@
                     var link = function (e) {
                         return e.name === 'a' && e.children.length === 1 && med(e.children[0]);
                     };
-                    var isFigure = !!CKEDITOR.api.parser.isMediaFigure(el);
+                    var isFigure = CKEDITOR.api.parser.isMediaFigure(el);
 
                     // Add missing caption
                     if (isFigure && el.children.length === 1) {

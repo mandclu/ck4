@@ -50,10 +50,10 @@
          * Opens a browser window with given name and executes given callback function when a message from the browser
          * window is received and closes the browser window
          *
-         * @param {string} url
-         * @param {function} call
-         * @param {string} [name = "browser"]
-         * @param {string} [opts = null]
+         * @param {String} url
+         * @param {Function} call
+         * @param {String} [name = "browser"]
+         * @param {String} [opts = null]
          */
         browser: function (url, call, name, opts) {
             if (!url || typeof call !== 'function') {
@@ -101,7 +101,7 @@
             /**
              * Returns all type names
              *
-             * @return {string[]}
+             * @return {String[]}
              */
             all: function () {
                 return Object.getOwnPropertyNames(defaults.media);
@@ -110,9 +110,9 @@
             /**
              * Determines type from HTML element
              *
-             * @param {string} element
+             * @param {String} element
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             fromElement: function (element) {
                 var types = Object.getOwnPropertyNames(defaults.media);
@@ -129,9 +129,9 @@
             /**
              * Determines type from URL by trying to map the content
              *
-             * @param {string} url
+             * @param {String} url
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             fromUrl: function (url) {
                 var contentType = CKEDITOR.api.xhr.head(url, {'content-type': null})['content-type'] || null;
@@ -153,9 +153,9 @@
             /**
              * Returns HTML element for given type
              *
-             * @param {string} type
+             * @param {String} type
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             element: function (type) {
                 return defaults.media.hasOwnProperty(type) ? defaults.media[type].element : null;
@@ -170,9 +170,9 @@
              * Checks if element has one of given CSS classes set and returns first found class
              *
              * @param {CKEDITOR.htmlParser.element} el
-             * @param {string[]} classes
+             * @param {String[]} classes
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             hasClass: function (el, classes) {
                 if (!el || typeof el.hasClass !== 'function' || !Array.isArray(classes)) {
@@ -191,10 +191,57 @@
              *
              * @param {CKEDITOR.htmlParser.element} el
              *
-             * @return {string|null}
+             * @return {Boolean}
              */
             isMediaFigure: function (el) {
-                return el && el.name === 'figure' && CKEDITOR.api.parser.hasClass(el, Object.getOwnPropertyNames(defaults.media));
+                return !!el && el.name === 'figure' && CKEDITOR.api.parser.hasClass(el, Object.getOwnPropertyNames(defaults.media));
+            },
+
+            /**
+             * Indicates if element is removable because it is not en empty element and its inner HTML is empty
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {Boolean}
+             */
+            removable: function (el) {
+                return !!el && !CKEDITOR.dtd.$empty[el.name] && !el.getHtml().trim();
+            },
+
+            /**
+             * Removes element if it's not an empty element and its inner HTML is empty and returns true if element was
+             * removed or false otherwise
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {Boolean}
+             */
+            remove: function (el) {
+                if (!!el && CKEDITOR.api.parser.removable(el)) {
+                    el.remove();
+                    return true;
+                }
+
+                return false;
+            },
+
+            /**
+             * Adds element to parent at given index if it is not removable and returns true if element was added or
+             * false otherwise
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             * @param {CKEDITOR.htmlParser.element} parent
+             * @param {Number} [index = null]
+             *
+             * @return {Boolean}
+             */
+            add: function (el, parent, index) {
+                if (!!el && !CKEDITOR.api.parser.removable(el)) {
+                    parent.add(el, index);
+                    return true;
+                }
+
+                return false;
             }
         },
 
@@ -205,9 +252,9 @@
             /**
              * Returns origin from given URL
              *
-             * @param {string} url
+             * @param {String} url
              *
-             * @return {string}
+             * @return {String}
              */
             origin: function (url) {
                 var a = document.createElement('a');
@@ -219,9 +266,9 @@
             /**
              * Transforms given URL to a root-relative or absolute URL depending on its origin
              *
-             * @param {string} url
+             * @param {String} url
              *
-             * @return {string}
+             * @return {String}
              */
             root: function (url) {
                 var a = document.createElement('a');
@@ -238,9 +285,9 @@
             /**
              * Sends a XMLHttpRequest with the DELETE method
              *
-             * @param {string} url
+             * @param {String} url
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             delete: function (url) {
                 return request('DELETE', url);
@@ -249,9 +296,9 @@
             /**
              * Sends a XMLHttpRequest with the GET method
              *
-             * @param {string} url
+             * @param {String} url
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             get: function (url) {
                 return request('GET', url);
@@ -260,7 +307,7 @@
             /**
              * Sends a XMLHttpRequest with the HEAD method and returns given response headers as an object
              *
-             * @param {string} url
+             * @param {String} url
              * @param {Object} header
              *
              * @return {Object|null}
@@ -272,11 +319,11 @@
             /**
              * Sends a XMLHttpRequest with the POST method
              *
-             * @param {string} url
-             * @param {string} body
+             * @param {String} url
+             * @param {String} body
              * @param {Object} [header = null]
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             post: function (url, body, header) {
                 return request('POST', url, body, header);
@@ -285,11 +332,11 @@
             /**
              * Sends a XMLHttpRequest with the PUT method
              *
-             * @param {string} url
-             * @param {string} body
+             * @param {String} url
+             * @param {String} body
              * @param {Object} [header = null]
              *
-             * @return {string|null}
+             * @return {String|null}
              */
             put: function (url, body, header) {
                 return request('PUT', url, body, header);
@@ -300,9 +347,9 @@
     /**
      * Sends a XMLHttpRequest with given method and returns the response as text
      *
-     * @param {string} method
-     * @param {string} url
-     * @param {string|null} [body = null]
+     * @param {String} method
+     * @param {String} url
+     * @param {String|null} [body = null]
      * @param {Object|null} [header = {}]
      *
      * @return {Object|string|null}

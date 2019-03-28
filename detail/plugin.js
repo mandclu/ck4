@@ -10,7 +10,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('detail', {
-        requires: 'widget',
+        requires: 'api,widget',
         icons: 'detail',
         hidpi: true,
         lang: 'de,en,uk,ru',
@@ -64,9 +64,7 @@
                     // Content
                     el.children[1].setHtml(this.editables.content.getData());
                     el.children[1].children.forEach(function (item) {
-                        if (item.isEmpty || item.getHtml().trim()) {
-                            el.add(item);
-                        }
+                        CKEDITOR.api.parser.add(item, el);
                     });
                     el.children[1].remove();
 
