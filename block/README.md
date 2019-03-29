@@ -2,7 +2,7 @@
 
 This widget let's you create and edit non-editable and optionally previewable placeholder blocks. 
 
-You can edit the placeholder block through a simple dialog where you can enter the ID of the block into a text input field. How you use ID-field is completely up to you. Whatever makes sense for you or rather your application is fine. 
+You can edit the placeholder block through a simple dialog where you can enter the ID of the block into a text input field. How you use the ID-field is completely up to you. Whatever makes sense for you or rather your application is fine. 
 
 Additionally, you can integrate a block browser similar to a file/media browser and select the block through that. Your block browser implementation can pass the *id* and optionally the *content* of the selected block. If the *content* is passed, the selected block will be previewable.
 
