@@ -29,7 +29,7 @@ To enable the block API option, you just have to configure an URL callback funct
         return '/example/url/to/api/' + id ;
     };
 
-This widget will then issue a GET request to the resulting URL to the block API. The block API must only return the HTML content for the preview if the block with the requested ID exists.
+This widget will then issue a `GET` request to the final URL. The block API must only return the HTML content for the preview if the block with the requested ID exists.
 
 ## Technical
 
