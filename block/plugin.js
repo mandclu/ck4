@@ -13,7 +13,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('block', {
-        requires: 'api,browser,dialog,widget',
+        requires: 'api,dialog,widget',
         icons: 'block',
         hidpi: true,
         lang: 'de,en',
@@ -21,7 +21,7 @@
             /**
              * Config
              */
-            if (!editor.config.blockBrowser || typeof editor.config.blockBrowser !== 'string') {
+            if (!editor.plugins.browser || !editor.config.blockBrowser || typeof editor.config.blockBrowser !== 'string') {
                 editor.config.blockBrowser = null;
             }
 
