@@ -19,17 +19,6 @@
         lang: 'de,en',
         init: function (editor) {
             /**
-             * Config
-             */
-            if (!editor.plugins.browser || !editor.config.blockBrowser || typeof editor.config.blockBrowser !== 'string') {
-                editor.config.blockBrowser = null;
-            }
-
-            if (!editor.config.blockApi || ['function', 'string'].indexOf(typeof editor.config.blockApi) > 0) {
-                editor.config.blockApi = null;
-            }
-
-            /**
              * Widget
              */
             editor.widgets.add('block', {
@@ -109,7 +98,7 @@
         /**
          * Browse button
          */
-        if (!!ev.editor.plugins.browser && !!ev.editor.config.blockBrowser) {
+        if (!!ev.editor.plugins.browser && typeof ev.editor.config.blockBrowser === 'string' && !!ev.editor.config.blockBrowser) {
             var browse = ev.data.definition.contents[0].elements[1];
             browse.hidden = false;
             browse.browser = function (data) {
@@ -133,8 +122,8 @@
      * @return {String}
      */
     function get(url, id) {
-        if (!!url && !!id) {
-            return CKEDITOR.api.xhr.get(typeof url === 'function' ? url(id) : url + '?id=' + id);
+        if (typeof url === 'function' && !!id) {
+            return CKEDITOR.api.xhr.get(url(id));
         }
 
         return '';
