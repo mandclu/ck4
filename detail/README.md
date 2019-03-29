@@ -1,6 +1,6 @@
 # Details Widget
 
-This widget handles [details-elements](https://html.spec.whatwg.org/multipage/interactive-elements.html#the-details-element). 
+This widget provides support for *details* and *summary* elements. 
 
 No configuration necessary.
 
