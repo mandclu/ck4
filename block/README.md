@@ -50,4 +50,6 @@ This widget will add some minimal CSS to the editor to make the placeholder some
 
 ## Demo
 
-Please check out the [demo](https://akilli.github.io/rte/ck4) to see this widget and both optional features in action. The source code of the demo editor [configuration](https://github.com/akilli/rte/blob/master/ck4/index.js) and [minimalistic browser implementation](https://github.com/akilli/rte/tree/master/browser) could be a starting point for your own implemementation. 
+https://akilli.github.io/rte/ck4
+
+Please check out the demo to see this widget and both optional features in action. The source code of the demo editor [configuration](https://github.com/akilli/rte/blob/master/ck4/index.js) and [minimalistic browser implementation](https://github.com/akilli/rte/tree/master/browser) could be a starting point for your own implemementation. 
