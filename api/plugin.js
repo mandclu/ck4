@@ -175,15 +175,13 @@
              * @return {String|null}
              */
             hasClass: function (el, classes) {
-                if (!el || typeof el.hasClass !== 'function' || !Array.isArray(classes)) {
+                if (!el || !el.attributes.class || !Array.isArray(classes)) {
                     return null;
                 }
 
-                var call = function (item) {
-                    return el.hasClass(item);
-                };
+                var match = el.attributes.class.match(new RegExp('(?:^| )(' + classes.join('|') + ')(?:$| )', 'g'));
 
-                return classes.find(call) || null;
+                return !!match ? match[0] : null;
             },
 
             /**
