@@ -5,7 +5,7 @@ media public api merged into api plugin
 
 This media widget can embed image, audio, video and iframe elements solely with their corresponding tags or wrapped within a figure element optionally with a caption. 
 
-In case the media element is wrapped within a figure element, this widget will add the CSS class `image`, `audio`, `video` or `iframe` to the figure element. It also supports alignment by setting an appropriate CSS class (`left` or `right`), and the attributes `width`, `height` and `alt`. The `controls`(audio and video) and `allowfullscreen` (iframe) are automatically set.
+In case the media element is wrapped within a figure element, this widget will add the CSS class *image*, *audio*, *video* or *iframe* to the figure element. It also supports alignment by setting an appropriate CSS class (*left* or *right*), and the attributes *width*, *height* and *alt*. The *controls*(audio and video) and *allowfullscreen* (iframe) are automatically set.
 
 ## Supported browser APIs
 

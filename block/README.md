@@ -4,9 +4,9 @@ This widget let's you create and edit non-editable and optionally previewable pl
 
 You can edit the placeholder block through a simple dialog where you can enter the ID of the block into a text input field. How you use ID-field is completely up to you. Whatever makes sense for you or rather your application is fine. 
 
-Additionally, you can integrate a block browser similar to a file/media browser and select the block through that. Your block browser implementation can pass the `id` and optionally the `content` of the selected block. If the `content` is passed, the selected block will be previewable.
+Additionally, you can integrate a block browser similar to a file/media browser and select the block through that. Your block browser implementation can pass the *id* and optionally the *content* of the selected block. If the *content* is passed, the selected block will be previewable.
 
-In order to make blocks previewable that are already in the initial content when you load the editor, you have to provide an URL to a block API that will return the `content` for a requested `id`.
+In order to make blocks previewable that are already in the initial content when you load the editor, you have to provide an URL to a block API that will return the *content* for a requested *id*.
 
 ## Block Browser
 
@@ -38,11 +38,11 @@ This widget will then issue a GET request to the resulting URL to the block API.
 
 ## Technical
 
-When you save the editor content, i.e. on `downcast`, the resulting placeholder will be a `block`-element with an `id` attribute
+When you save the editor content, i.e. on *downcast*, the resulting placeholder will be a *block*-element with an *id* attribute
 
     <block id=""/>
 
-When you load your content into the editor, i.e. on `upcast`, the `block`-element will be tranformed to a `div`-element with a `data-block`-attribute
+When you load your content into the editor, i.e. on *upcast*, the *block*-element will be tranformed to a *div*-element with a *data-block*-attribute
 
     <div data-block=""></div>
 
