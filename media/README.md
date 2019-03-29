@@ -24,9 +24,9 @@ Second option if mediabrowser is installed
 If you use the [mediabrowser add-on](https://ckeditor.com/cke4/addon/mediabrowser), your media browser implementation can currently send following keys with the message:
 
     {
-        alt: 'Alternative text', // optional
-        src: '/url/to/media', //required
-        type: 'image' // optional, one of audio, iframe, image or video
+        src: '...', //required, URL to media
+        type: '...' // optional, media type (audio, iframe, image or video)
+        alt: 'Alternative text', // optional, alternative text
     }
 
 ### [File Browser plugin](https://ckeditor.com/cke4/addon/filebrowser)
