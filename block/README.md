@@ -41,7 +41,7 @@ When you load your content into the editor, i.e. on *upcast*, the *block*-elemen
 
     <div data-block=""></div>
 
-This widget will add some minimal CSS to the editor to make the placeholder somehow visible. You surely want to adjust that to your needs, especially if you make use of the block browser and API options.
+This widget will add some minimal CSS to the editor to make the placeholder somehow visible. You likely want add more styles to adjust the look to your needs, especially if you make use of the block browser and API options.
 
 ## Demo
 
