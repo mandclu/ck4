@@ -57,17 +57,6 @@
                             }
                         },
                         {
-                            id: 'caption',
-                            type: 'checkbox',
-                            label: lang.caption,
-                            setup: function (widget) {
-                                this.setValue(widget.data.caption);
-                            },
-                            commit: function (widget) {
-                                widget.setData('caption', this.getValue());
-                            }
-                        },
-                        {
                             id: 'link',
                             type: 'text',
                             label: lang.link,

@@ -4,7 +4,6 @@
     CKEDITOR.plugins.setLang('media', 'uk', {
         alt: 'Альтернативний текст',
         audio: 'Аудіо',
-        caption: 'Підпис',
         iframe: 'Iframe',
         image: 'Картинка',
         info: 'Інфо',

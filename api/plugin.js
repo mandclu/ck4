@@ -134,10 +134,10 @@
              * @return {String|null}
              */
             fromUrl: function (url) {
-                var contentType = CKEDITOR.api.xhr.head(url, {'content-type': null})['content-type'] || null;
+                var header = CKEDITOR.api.xhr.head(url, {'content-type': null});
 
-                if (!!contentType) {
-                    var type = contentType.split(';')[0].trim();
+                if (!!header && !!header['content-type']) {
+                    var type = header['content-type'].split(';')[0].trim();
                     var types = Object.getOwnPropertyNames(defaults.media);
 
                     for (var i = 0; i < types.length; ++i) {
@@ -167,65 +167,22 @@
          */
         parser: {
             /**
-             * Checks if element has one of given CSS classes set and returns first found class
+             * Adds element to parent at given index if it is not removable and returns true if element was added or
+             * false otherwise
              *
              * @param {CKEDITOR.htmlParser.element} el
-             * @param {String[]} classes
+             * @param {CKEDITOR.htmlParser.element} parent
+             * @param {Number} [index = null]
              *
-             * @return {String|null}
+             * @return {Boolean}
              */
-            hasClass: function (el, classes) {
-                if (!el || !el.attributes.class || !Array.isArray(classes)) {
-                    return null;
+            add: function (el, parent, index) {
+                if (!!el && !CKEDITOR.api.parser.removable(el)) {
+                    parent.add(el, index);
+                    return true;
                 }
 
-                var match = el.attributes.class.match(new RegExp('(?:^| )(' + classes.join('|') + ')(?:$| )', 'g'));
-
-                return !!match ? match[0] : null;
-            },
-
-            /**
-             * Checks if element is a `figure` and has one of the CSS classes corresponding to a media type
-             *
-             * @param {CKEDITOR.htmlParser.element} el
-             *
-             * @return {Boolean}
-             */
-            isMediaFigure: function (el) {
-                return !!el && el.name === 'figure' && CKEDITOR.api.parser.hasClass(el, Object.getOwnPropertyNames(defaults.media));
-            },
-
-            /**
-             * Checks if given element is a media element
-             *
-             * @param {CKEDITOR.htmlParser.element} el
-             *
-             * @return {Boolean}
-             */
-            isMediaElement: function (el) {
-                return !!el && !!CKEDITOR.api.media.fromElement(el.name);
-            },
-
-            /**
-             * Checks if given element is a link with a media element as only child
-             *
-             * @param {CKEDITOR.htmlParser.element} el
-             *
-             * @return {Boolean}
-             */
-            isMediaLink: function (el) {
-                return !!el && el.name === 'a' && el.children.length === 1 && CKEDITOR.api.parser.isMediaElement(el.children[0])
-            },
-
-            /**
-             * Indicates if element is removable because it is not en empty element and its inner HTML is empty
-             *
-             * @param {CKEDITOR.htmlParser.element} el
-             *
-             * @return {Boolean}
-             */
-            removable: function (el) {
-                return !!el && !CKEDITOR.dtd.$empty[el.name] && !el.getHtml().trim();
+                return false;
             },
 
             /**
@@ -246,22 +203,92 @@
             },
 
             /**
-             * Adds element to parent at given index if it is not removable and returns true if element was added or
-             * false otherwise
+             * Indicates if element is removable because it is not en empty element and its inner HTML is empty
              *
              * @param {CKEDITOR.htmlParser.element} el
-             * @param {CKEDITOR.htmlParser.element} parent
-             * @param {Number} [index = null]
              *
              * @return {Boolean}
              */
-            add: function (el, parent, index) {
-                if (!!el && !CKEDITOR.api.parser.removable(el)) {
-                    parent.add(el, index);
-                    return true;
+            removable: function (el) {
+                return !!el && !CKEDITOR.dtd.$empty[el.name] && !el.getHtml().trim();
+            },
+
+            /**
+             * Checks if element has one of given CSS classes set and returns first found class
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             * @param {String[]} classes
+             *
+             * @return {String|null}
+             */
+            hasClass: function (el, classes) {
+                if (!el || !el.hasOwnProperty('attributes') || !el.attributes.hasOwnProperty('class') || !Array.isArray(classes)) {
+                    return null;
                 }
 
-                return false;
+                var match = el.attributes.class.match(new RegExp('(?:^| )(' + classes.join('|') + ')(?:$| )', 'g'));
+
+                return !!match ? match[0] : null;
+            },
+
+            /**
+             * Checks if element is a media `figure` or media element and returns the media type or null otherwise
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {String|null}
+             */
+            isMedia: function (el) {
+                var type = CKEDITOR.api.parser.isMediaElement(el);
+
+                if (!type || !!el.getAscendant(CKEDITOR.api.parser.isMediaFigure)) {
+                    type = CKEDITOR.api.parser.isMediaFigure(el);
+                }
+
+                return type;
+            },
+
+            /**
+             * Checks if element is a media `figure`, i.e. has one of the CSS classes corresponding to a media type, and
+             * returns the media type or null otherwise
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {String|null}
+             */
+            isMediaFigure: function (el) {
+                if (!!el && el.name === 'figure') {
+                    return CKEDITOR.api.parser.hasClass(el, Object.getOwnPropertyNames(defaults.media));
+                }
+
+                return null;
+            },
+
+            /**
+             * Checks if given element is a media element and returns the media type or null otherwise
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {String|null}
+             */
+            isMediaElement: function (el) {
+                return !!el ? CKEDITOR.api.media.fromElement(el.name) : null;
+            },
+
+            /**
+             * Checks if given element is a link with a media element as only child and returns media type or null
+             * otherwise
+             *
+             * @param {CKEDITOR.htmlParser.element} el
+             *
+             * @return {String|null}
+             */
+            isMediaLink: function (el) {
+                if (!!el && el.name === 'a' && el.children.length === 1) {
+                    return CKEDITOR.api.parser.isMediaElement(el.children[0]);
+                }
+
+                return null;
             }
         },
 

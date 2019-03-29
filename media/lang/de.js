@@ -4,7 +4,6 @@
     CKEDITOR.plugins.setLang('media', 'de', {
         alt: 'Alternativer Text',
         audio: 'Audio',
-        caption: 'Beschriftung',
         iframe: 'Iframe',
         image: 'Bild',
         info: 'Info',

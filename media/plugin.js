@@ -69,7 +69,6 @@
                 defaults: {
                     align: '',
                     alt: '',
-                    caption: false,
                     height: '',
                     link: '',
                     src: '',
@@ -77,62 +76,63 @@
                     width: ''
                 },
                 upcast: function (el) {
-                    if (CKEDITOR.api.parser.isMediaElement(el) && !el.getAscendant(CKEDITOR.api.parser.isMediaFigure)) {
-                        return true;
-                    }
+                    var type = CKEDITOR.api.parser.isMedia(el);
 
-                    if (!CKEDITOR.api.parser.isMediaFigure(el)
-                        || el.children.length < 1
-                        || !CKEDITOR.api.parser.isMediaElement(el.children[0]) && !CKEDITOR.api.parser.isMediaLink(el.children[0])
-                    ) {
+                    if (!type) {
                         return false;
                     }
 
-                    // Caption
-                    if (el.children.length < 2 || el.children[1].name !== 'figcaption') {
-                        el.add(new CKEDITOR.htmlParser.element('figcaption'));
+                    // Figure
+                    var figure = el;
+
+                    if (el.name !== 'figure') {
+                        figure = new CKEDITOR.htmlParser.element('figure', {'class' : type});
+                        el.wrapWith(figure);
+                    } else if (el.children.length < 1 || !CKEDITOR.api.parser.isMediaElement(el.children[0]) && !CKEDITOR.api.parser.isMediaLink(el.children[0])) {
+                        var text = new CKEDITOR.htmlParser.text('');
+                        el.replaceWith(text);
+
+                        return text;
                     }
 
-                    el.children = el.children.slice(0, 2);
+                    // Caption
+                    if (figure.children.length < 2 || figure.children[1].name !== 'figcaption') {
+                        figure.add(new CKEDITOR.htmlParser.element('figcaption'));
+                    }
 
-                    return true;
+                    figure.children = figure.children.slice(0, 2);
+
+                    return figure;
                 },
                 downcast: function (el) {
-                    if (el.name === 'figure') {
-                        if (this.data.link && el.children[0].name === 'img') {
-                            el.children[0].wrapWith(new CKEDITOR.htmlParser.element('a', {'href': this.data.link}));
-                        }
+                    if (this.data.link && el.children[0].name === 'img') {
+                        el.children[0].wrapWith(new CKEDITOR.htmlParser.element('a', {'href': this.data.link}));
+                    }
 
-                        if (!el.children[1].getHtml().trim()) {
-                            el.children[1].remove();
-                        } else {
-                            el.children[1].attributes = [];
-                        }
+                    if (!el.children[1].getHtml().trim()) {
+                        el.children[1].remove();
+                    } else {
+                        el.children[1].attributes = [];
                     }
                 },
                 init: function () {
                     var widget = this;
                     var el = widget.element;
-                    var media = el;
-                    var a;
+                    var media = el.getFirst();
 
-                    // Figure with caption + link
-                    if (el.getName() === 'figure') {
-                        widget.setData('caption', true);
+                    // Figure
+                    if (el.hasClass(defaults.align.left)) {
+                        widget.setData('align', 'left');
+                    } else if (el.hasClass(defaults.align.right)) {
+                        widget.setData('align', 'right');
+                    }
+
+                    // Link
+                    if (media.getName() === 'a') {
+                        widget.setData('link', media.getAttribute('href'));
+                        media.getChild(0).move(el, true);
+                        media.remove();
                         media = el.getFirst();
-
-                        if (media.getName() === 'a') {
-                            widget.setData('link', media.getAttribute('href'));
-                            media.getChild(0).move(el, true);
-                            media.remove();
-                            media = el.getFirst();
-                        }
-                    } else {
-                        if (a = el.getAscendant('a')) {
-                            widget.setData('link', a.getAttribute('href'));
-                        }
-
-                        widget.inline = true;
                     }
 
                     // Media
@@ -146,108 +146,47 @@
                             widget.setData(item, media.getAttribute(item));
                         }
                     });
-
-                    // Align
-                    if (el.hasClass(defaults.align.left)) {
-                        widget.setData('align', 'left');
-                    } else if (el.hasClass(defaults.align.right)) {
-                        widget.setData('align', 'right');
-                    }
                 },
                 data: function () {
                     var widget = this;
                     var el = widget.element;
-                    var media = el;
+                    var media = el.getChild(0);
                     var type = widget.data.type;
                     var name;
-                    var caption = null;
 
                     if (!widget.data.src || !type || !(name = CKEDITOR.api.media.element(type))) {
                         return;
                     }
 
+                    // Figure
                     CKEDITOR.api.media.all().concat([defaults.align.left, defaults.align.right]).forEach(function (item) {
                         el.removeClass(item);
                     });
+                    el.addClass(type);
 
-                    if (el.getName() === 'figure') {
-                        media = el.getChild(0);
-                        caption = el.getChild(1);
+                    if (widget.data.align && defaults.align.hasOwnProperty(widget.data.align)) {
+                        el.addClass(defaults.align[widget.data.align]);
                     }
 
-                    widget.inline = !widget.data.caption;
-
-                    if (widget.data.caption && el.getName() !== 'figure') {
-                        el.renameNode('figure');
-                        defaults.attr.forEach(function (item) {
-                            el.removeAttribute(item);
-                        });
-                        media = new CKEDITOR.dom.element(name);
-                        el.append(media, true);
-                        caption = new CKEDITOR.dom.element('figcaption');
-                        el.append(caption);
-                        widget.initEditable('caption', widget.definition.editables.caption);
-                        widget.wrapper.renameNode('div');
-                        widget.wrapper.removeClass('cke_widget_inline');
-                        widget.wrapper.addClass('cke_widget_block');
-                    } else if (!widget.data.caption && el.getName() === 'figure') {
-                        el.renameNode(name);
-                        media.remove();
-                        media = el;
-                        caption.remove();
-                        caption = null;
-                        widget.wrapper.renameNode('span');
-                        widget.wrapper.removeClass('cke_widget_block');
-                        widget.wrapper.addClass('cke_widget_inline');
-                    }
-
-                    if (el.getName() === 'figure') {
-                        el.addClass(type);
-                    }
-
+                    // Media
                     if (media.getName() !== name) {
                         media.renameNode(name);
                     }
 
-                    // Media attributes
-                    media.setAttribute('src', widget.data.src);
-
-                    if (widget.data.width) {
-                        media.setAttribute('width', widget.data.width);
-                    } else {
-                        media.removeAttribute('width');
-                    }
-
-                    if (widget.data.height) {
-                        media.setAttribute('height', widget.data.height);
-                    } else {
-                        media.removeAttribute('height');
-                    }
-
-                    if (type === 'image') {
-                        media.removeAttribute('allowfullscreen');
-                        media.setAttribute('alt', widget.data.alt);
-                        media.removeAttribute('controls');
-                    } else if (type === 'video') {
-                        media.removeAttribute('allowfullscreen');
-                        media.removeAttribute('alt');
-                        media.setAttribute('controls', 'controls');
-                    } else if (type === 'audio') {
-                        media.removeAttribute('allowfullscreen');
-                        media.removeAttribute('alt');
-                        media.removeAttribute('height');
-                        media.removeAttribute('width');
-                        media.setAttribute('controls', 'controls');
-                    } else if (type === 'iframe') {
-                        media.setAttribute('allowfullscreen', 'allowfullscreen');
-                        media.removeAttribute('alt');
-                        media.removeAttribute('controls');
-                    }
-
-                    // Align
-                    if (widget.data.align && defaults.align.hasOwnProperty(widget.data.align)) {
-                        el.addClass(defaults.align[widget.data.align]);
-                    }
+                    defaults.attr.forEach(function (item) {
+                        if (!!widget.data[item] && (item !== 'alt' || type === 'image') && (['height', 'width'].indexOf(item) < 0 || type !== 'audio')) {
+                            media.setAttribute(item, widget.data[item]);
+                        } else {
+                            media.removeAttribute(item);
+                        }
+                    });
+                    ['allowfullscreen', 'controls'].forEach(function (item) {
+                        if (item === 'allowfullscreen' && type === 'iframe' || item === 'controls' && ['audio', 'video'].indexOf(type) >= 0) {
+                            media.setAttribute(item, item);
+                        } else {
+                            media.removeAttribute(item);
+                        }
+                    });
                 }
             });
 
