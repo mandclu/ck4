@@ -76,6 +76,7 @@
                     el.children[0].attributes = [];
                     el.children[0].setHtml(this.editables.quote.getData());
                     el.children[0].children.forEach(CKEDITOR.api.parser.remove);
+                    this.editables.quote.setHtml(el.children[0].getHtml());
 
                     if (!el.children[0].getHtml().trim()) {
                         return new CKEDITOR.htmlParser.text('');
