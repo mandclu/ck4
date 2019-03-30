@@ -10,7 +10,7 @@ In order to make blocks previewable that are already in the initial content when
 
 ## Block Browser
 
-To enable the block browser option, you need the [browser plugin](https://ckeditor.com/cke4/addon/browser), a browser implementation that uses the browser plugin and have to configure the URL to the browser implementation, p.e.
+To enable the block browser option, you need the [browser](https://ckeditor.com/cke4/addon/browser) plugin, a browser implementation that uses the browser plugin and have to configure the URL to the browser implementation, p.e.
     
     config.blockBrowser = '/example/url/to/browser';
 
