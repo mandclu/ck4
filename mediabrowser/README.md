@@ -49,10 +49,6 @@ and that your browser notifies the editor by posting a message p.e. like
 
 The type and structure of your message is complety up to you, p.e. you can use a simple string if you are only interested in one value, an object or an array.
 
-## Technical
-
-The public API was removed in version 2.0 from this widget, because identical functionality and more is already provided by the [api](https://ckeditor.com/cke4/addon/api) plugin.
-
 ## Demo
 
 https://akilli.github.io/rte/ck4
