@@ -43,7 +43,9 @@ Your browser implementation can currently send following keys with the message:
 
 ## Note
 
-Inline media elements are not supported anymore. If you need them, please stick with version [0.20](https://download.ckeditor.com/media/releases/media_0.20.zip) or use another plugin.
+If you need inline media elements in the resulting HTML, please stick with version [0.20](https://download.ckeditor.com/media/releases/media_0.20.zip) or use another plugin, because this is not supported anymore.
+
+Inline media elements initially loaded into the editor content will automatically be wrapped inside a figure and stay there when you save the editor content, even if you omit the caption.
 
 ## Demo
 
