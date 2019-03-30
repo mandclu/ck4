@@ -4,7 +4,7 @@ This widget embeds image, video, audio and iframe elements wrapped within a figu
 
 The figure will get an appropriate CSS class reflecting the media type (*image*, *video*, *audio* or *iframe*) and, if alignment is set, one of *left* or *right*.
 
-Currently this widget supports setting the attributes *width* and *height* for all media types and *alt* for images. The *controls*(audio and video) and *allowfullscreen* (iframe) are automatically set.
+Currently this widget supports setting the attributes *width* and *height* for all media types and *alt* for images. The *controls* (audio and video) and *allowfullscreen* (iframe) are automatically set.
 
 The resulting HTM will be p.e. for an image with a caption
 
