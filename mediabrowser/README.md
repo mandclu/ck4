@@ -38,7 +38,7 @@ To use the provided API in your plugin, you just have to define a callback funct
 
 You can implement your browser as you wish, the only two requirements are that you configure the URL to your browser as `mediabrowserUrl` p.e.
 
-    config.mediabrowserUrl: '/url/to/mediabrowser';
+    config.mediabrowserUrl: '/url/to/browser';
 
 and that your browser notifies the editor by posting a message p.e. like
 

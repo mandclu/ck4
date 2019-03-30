@@ -32,7 +32,7 @@ To use the provided API in your plugin, you just have to define a callback funct
                 });
             }
         },
-        browserUrl: '/example/url/to/browser'
+        browserUrl: '/url/to/browser'
     }
 
 ## Browser Integration

@@ -1,37 +1,49 @@
 # Media Widget
 
-@todo Needs update, the following is not up to date
-media public api merged into api plugin
+This widget embeds image, video, audio and iframe elements wrapped within a figure and optionally with a caption.
 
-This media widget can embed image, audio, video and iframe elements solely with their corresponding tags or wrapped within a figure element optionally with a caption. 
+The figure will get an appropriate CSS class reflecting the media type (*image*, *video*, *audio* or *iframe*) and, if aligned is set, one of *left* or *right*.
 
-In case the media element is wrapped within a figure element, this widget will add the CSS class *image*, *audio*, *video* or *iframe* to the figure element. It also supports alignment by setting an appropriate CSS class (*left* or *right*), and the attributes *width*, *height* and *alt*. The *controls*(audio and video) and *allowfullscreen* (iframe) are automatically set.
+Currently this widget supports setting the attributes *width* and *height* for all media types and *alt* for images. The *controls*(audio and video) and *allowfullscreen* (iframe) are automatically set.
+
+The resulting HTM will be p.e. for an image with a caption
+
+    <figure class="image">
+        <img src="/url/to/media" alt="Some Alternative" />
+        <figcaption>An image with alternative text, but witout width and height set</figcaption>
+    </figure>
 
 ## Supported browser APIs
 
-If you have installed a file browser that uses the API of the [mediabrowser add-on](https://ckeditor.com/cke4/addon/mediabrowser) or the [filebrowser add-on](https://ckeditor.com/cke4/addon/filebrowser), the _Browse server_ button will appear. This widget itself does not provide any file browser.
+If you provide a browser implementation that uses one of the following browser APIs the _Browse server_ button will appear:
 
-Note: This plugin would actually not need any of these APIs, but uses them to allow you to re-use your existing filebrowser implementation. 
+1. [browser](https://ckeditor.com/cke4/addon/browser) 
+2. [mediabrowser](https://ckeditor.com/cke4/addon/mediabrowser) 
+3. [filebrowser](https://ckeditor.com/cke4/addon/filebrowser)
 
-### [Browser plugin](https://ckeditor.com/cke4/addon/browser)
+**This widget itself does not provide any file browser**
 
-default if browser is installed and config.mediaBrowser is set
+The browser plugin (if installed) will be used as the preferred option, when the URL to your browser implementation is configured
 
-### [Media Browser plugin](https://ckeditor.com/cke4/addon/mediabrowser)
+    config.mediaBrowser = '/url/to/browser';
 
-Second option if mediabrowser is installed
+Otherwise the mediabrowser plugin (if installed and configured) will be used as the second option, or the filebrowser plugin (if installed) as the third option.
 
-If you use the [mediabrowser add-on](https://ckeditor.com/cke4/addon/mediabrowser), your media browser implementation can currently send following keys with the message:
+## Usage with browser and mediabrowser plugin
+
+The browser plugin is the prefer
+
+Your browser implementation can currently send following keys with the message:
 
     {
         src: '...', //required, URL to media
         type: '...' // optional, media type (audio, iframe, image or video)
-        alt: 'Alternative text', // optional, alternative text
+        alt: '...', // optional, alternative text (currently only used for images)
     }
 
-### [File Browser plugin](https://ckeditor.com/cke4/addon/filebrowser)
+## Note
 
-Third option
+Inline media elements are not supported anymore. If you need them, please stick with version [0.20](https://download.ckeditor.com/media/releases/media_0.20.zip) or use another plugin.
 
 ## Demo
 
