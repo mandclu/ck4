@@ -194,6 +194,11 @@
              * Dialog
              */
             CKEDITOR.dialog.add('media', this.path + 'dialogs/media.js');
+
+            /**
+             * Styles
+             */
+            editor.addContentsCss(this.path + 'styles/media.css');
         }
     });
 

@@ -72,6 +72,11 @@
              * Dialog
              */
             CKEDITOR.dialog.add('block', this.path + 'dialogs/block.js');
+
+            /**
+             * Styles
+             */
+            editor.addContentsCss(this.path + 'styles/block.css');
         }
     });
 

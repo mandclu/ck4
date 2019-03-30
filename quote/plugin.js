@@ -89,6 +89,11 @@
                     return !el.children[1].getHtml().trim() ? el.children[0] : el;
                 }
             });
+
+            /**
+             * Styles
+             */
+            editor.addContentsCss(this.path + 'styles/quote.css');
         }
     });
 })(CKEDITOR);

@@ -81,6 +81,11 @@
                     });
                 }
             });
+
+            /**
+             * Styles
+             */
+            editor.addContentsCss(this.path + 'styles/detail.css');
         }
     });
 })(CKEDITOR);
