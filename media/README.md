@@ -31,8 +31,6 @@ Otherwise the mediabrowser plugin (if installed and configured) will be used as 
 
 ## Usage with browser and mediabrowser plugin
 
-The browser plugin is the prefer
-
 Your browser implementation can currently send following keys with the message:
 
     {
