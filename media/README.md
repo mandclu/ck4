@@ -21,7 +21,7 @@ If you provide a browser implementation that uses one of the following browser A
 2. [mediabrowser](https://ckeditor.com/cke4/addon/mediabrowser) 
 3. [filebrowser](https://ckeditor.com/cke4/addon/filebrowser)
 
-**This widget itself does not provide any browser**
+**This widget itself does not provide any browser!**
 
 The browser plugin (if installed) will be used as the preferred option, when the URL to your browser implementation is configured
 
