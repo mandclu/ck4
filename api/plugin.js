@@ -116,8 +116,9 @@
              */
             fromElement: function (element) {
                 var types = Object.getOwnPropertyNames(defaults.media);
+                var l = types.length;
 
-                for (var i = 0; i < types.length; ++i) {
+                for (var i = 0; i < l; ++i) {
                     if (defaults.media[types[i]].element === element) {
                         return types[i];
                     }
@@ -139,8 +140,9 @@
                 if (!!header && !!header['content-type']) {
                     var type = header['content-type'].split(';')[0].trim();
                     var types = Object.getOwnPropertyNames(defaults.media);
+                    var l = types.length;
 
-                    for (var i = 0; i < types.length; ++i) {
+                    for (var i = 0; i < l; ++i) {
                         if (defaults.media[types[i]].mime.indexOf(type) >= 0) {
                             return types[i];
                         }
