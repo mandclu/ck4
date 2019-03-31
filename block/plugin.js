@@ -107,10 +107,10 @@
             var browse = ev.data.definition.contents[0].elements[1];
             browse.hidden = false;
             browse.browser = function (data) {
-                if (!!data.id && !!data.content) {
+                if (!!data.id) {
                     var dialog = this.getDialog();
                     ['id', 'content'].forEach(function (item) {
-                        dialog.getContentElement('info', item).setValue(data[item]);
+                        dialog.getContentElement('info', item).setValue(data[item] || '');
                     });
                 }
             };
