@@ -10,7 +10,7 @@ The resulting HTML for an image with a caption will be p.e.
 
     <figure class="image">
         <img src="/url/to/media" alt="Some Alternative" />
-        <figcaption>An image with alternative text, but witout width and height set</figcaption>
+        <figcaption>An image with alternative text, but without width and height set</figcaption>
     </figure>
 
 ## Supported browser APIs
