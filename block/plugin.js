@@ -128,7 +128,7 @@
      */
     function get(url, id) {
         if (typeof url === 'function' && !!id) {
-            return CKEDITOR.api.xhr.get(url(id));
+            return CKEDITOR.api.xhr.get(url(id)) || '';
         }
 
         return '';
