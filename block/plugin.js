@@ -41,30 +41,23 @@
                         return false;
                     }
 
-                    var newEl;
-
-                    if (!!(data.id = el.attributes['id']) && (!editor.config.blockApi || !!(data.content = get(editor.config.blockApi, data.id)))) {
-                        newEl = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
-                    } else {
-                        newEl = new CKEDITOR.htmlParser.text('');
-                    }
-
+                    data.id = el.attributes.id || '';
+                    data.content = get(editor.config.blockApi, data.id);
+                    var newEl = new CKEDITOR.htmlParser.element('div', {'data-block': data.id});
                     el.replaceWith(newEl);
 
                     return newEl;
                 },
                 downcast: function () {
-                    if (!!this.data.id) {
+                    if (!!this.data.id && (!editor.config.blockApi || !!this.data.content)) {
                         return new CKEDITOR.htmlParser.element('block', {'id': this.data.id});
                     }
 
                     return new CKEDITOR.htmlParser.text('');
                 },
                 data: function () {
-                    if (this.data.id) {
-                        this.element.setAttribute('data-block', this.data.id);
-                        this.element.setHtml(this.data.content);
-                    }
+                    this.element.setAttribute('data-block', this.data.id);
+                    this.element.setHtml(this.data.content);
                 }
             });
 
