@@ -422,15 +422,15 @@
             xhr.open(method, url, false);
             xhr.send(body);
 
-            if (method === 'HEAD' && xhr.readyState === xhr.HEADERS_RECEIVED) {
+            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
+                if (method !== 'HEAD') {
+                    return xhr.responseText;
+                }
+
                 Object.getOwnPropertyNames(header).forEach(function (name) {
                     header[name] = xhr.getResponseHeader(name);
                 });
                 return header;
-            }
-
-            if (xhr.readyState === xhr.DONE && xhr.status >= 200 && xhr.status < 300) {
-                return xhr.responseText;
             }
         } catch (e) {
             console.log(e);
