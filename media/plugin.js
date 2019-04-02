@@ -211,23 +211,9 @@
         }
 
         /**
-         * Source input
-         */
-        var src = ev.data.definition.contents[0].elements[0];
-        src.onChange = function () {
-            var type = '';
-
-            if (this.getValue()) {
-                type = CKEDITOR.api.media.fromUrl(this.getValue()) || '';
-            }
-
-            this.getDialog().getContentElement('info', 'type').setValue(type);
-        };
-
-        /**
          * Type select
          */
-        var type = ev.data.definition.contents[0].elements[2];
+        var type = ev.data.definition.contents[0].elements[0];
         type.items = [[ev.editor.lang.common.notSet, '']].concat(CKEDITOR.api.media.all().map(function (item) {
             return [ev.editor.lang.media[item], item];
         }).sort(function (a, b) {
@@ -243,9 +229,23 @@
         }));
 
         /**
+         * Source input
+         */
+        var src = ev.data.definition.contents[0].elements[1];
+        src.onChange = function () {
+            var type = '';
+
+            if (this.getValue()) {
+                type = CKEDITOR.api.media.fromUrl(this.getValue()) || '';
+            }
+
+            this.getDialog().getContentElement('info', 'type').setValue(type);
+        };
+
+        /**
          * Browse button
          */
-        var browse = ev.data.definition.contents[0].elements[1];
+        var browse = ev.data.definition.contents[0].elements[2];
         var call = function (data) {
             if (data.src) {
                 var dialog = this.getDialog();

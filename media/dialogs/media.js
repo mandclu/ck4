@@ -16,6 +16,18 @@
                     label: lang.info,
                     elements: [
                         {
+                            id: 'type',
+                            type: 'select',
+                            label: lang.type,
+                            setup: function (widget) {
+                                this.setValue(widget.data.type);
+                            },
+                            commit: function (widget) {
+                                widget.setData('type', this.getValue());
+                            },
+                            validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired)
+                        },
+                        {
                             id: 'src',
                             type: 'text',
                             label: common.url,
@@ -32,18 +44,6 @@
                             type: 'button',
                             label: common.browseServer,
                             hidden: true
-                        },
-                        {
-                            id: 'type',
-                            type: 'select',
-                            label: lang.type,
-                            setup: function (widget) {
-                                this.setValue(widget.data.type);
-                            },
-                            commit: function (widget) {
-                                widget.setData('type', this.getValue());
-                            },
-                            validate: CKEDITOR.dialog.validate.notEmpty(lang.validateRequired)
                         },
                         {
                             id: 'alt',
