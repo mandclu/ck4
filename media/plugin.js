@@ -250,7 +250,7 @@
             if (data.src) {
                 var dialog = this.getDialog();
 
-                ['src', 'type', 'alt'].forEach(function (item) {
+                ['src', 'type', 'alt', 'width', 'height'].forEach(function (item) {
                     if (!!data[item]) {
                         dialog.getContentElement('info', item).setValue(data[item]);
                     }
