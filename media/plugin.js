@@ -18,6 +18,8 @@
         hidpi: true,
         lang: 'de,en,uk,ru',
         init: function (editor) {
+            var placeholder = this.path  + 'styles/placeholder.svg';
+
             /**
              * Widget
              */
@@ -82,27 +84,25 @@
                         return false;
                     }
 
-                    // Figure
-                    var figure = el;
+                    // Figure + Media
+                    var fig = el;
 
                     if (el.name !== 'figure') {
-                        figure = new CKEDITOR.htmlParser.element('figure', {'class' : type});
-                        el.wrapWith(figure);
-                    } else if (el.children.length < 1 || !CKEDITOR.api.parser.isMediaElement(el.children[0]) && !CKEDITOR.api.parser.isMediaLink(el.children[0])) {
-                        var text = new CKEDITOR.htmlParser.text('');
-                        el.replaceWith(text);
-
-                        return text;
+                        fig = new CKEDITOR.htmlParser.element('figure', {'class' : type});
+                        el.wrapWith(fig);
+                    } else if (fig.children.length < 1 || !CKEDITOR.api.parser.isMediaElement(fig.children[0]) && !CKEDITOR.api.parser.isMediaLink(fig.children[0])) {
+                        fig.attributes.class = 'image';
+                        fig.add(new CKEDITOR.htmlParser.element('img', {'src' : placeholder}), 0);
                     }
 
                     // Caption
-                    if (figure.children.length < 2 || figure.children[1].name !== 'figcaption') {
-                        figure.add(new CKEDITOR.htmlParser.element('figcaption'));
+                    if (fig.children.length < 2 || fig.children[1].name !== 'figcaption') {
+                        fig.add(new CKEDITOR.htmlParser.element('figcaption'), 1);
                     }
 
-                    figure.children = figure.children.slice(0, 2);
+                    fig.children = fig.children.slice(0, 2);
 
-                    return figure;
+                    return fig;
                 },
                 downcast: function (el) {
                     if (this.data.link && el.children[0].name === 'img') {

@@ -41,13 +41,6 @@
                         return false;
                     }
 
-                    if (el.children.length <= 0) {
-                        var text = new CKEDITOR.htmlParser.text('');
-                        el.replaceWith(text);
-
-                        return text;
-                    }
-
                     var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
                     el.add(content, 0);
                     content.children = el.children.slice(1);

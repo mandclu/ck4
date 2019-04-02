@@ -43,33 +43,28 @@
                 },
                 requiredContent: 'figure(quote)',
                 upcast: function (el) {
-                    if (el.name === 'blockquote' && el.children.length > 0) {
-                        var figure = new CKEDITOR.htmlParser.element('figure', {class: 'quote'});
-                        el.wrapWith(figure);
-                        figure.add(new CKEDITOR.htmlParser.element('figcaption'));
-
-                        return figure;
-                    }
-
-                    if (el.name !== 'figure' || !el.hasClass('quote')) {
+                    if (el.name !== 'blockquote' && (el.name !== 'figure' || !el.hasClass('quote'))) {
                         return false;
                     }
 
-                    if (el.children.length <= 0 || el.children[0].name !== 'blockquote') {
-                        var text = new CKEDITOR.htmlParser.text('');
-                        el.replaceWith(text);
+                    // Figure + Quote
+                    var fig = el;
 
-                        return text;
+                    if (el.name === 'blockquote') {
+                        fig = new CKEDITOR.htmlParser.element('figure', {class: 'quote'});
+                        el.wrapWith(fig);
+                    } else if (fig.children.length < 1 || fig.children[0].name !== 'blockquote') {
+                        fig.add(new CKEDITOR.htmlParser.element('blockquote'), 0);
                     }
 
                     // Caption
-                    if (el.children.length < 2 || el.children[1].name !== 'figcaption') {
-                        el.add(new CKEDITOR.htmlParser.element('figcaption'), 1);
+                    if (fig.children.length < 2 || fig.children[1].name !== 'figcaption') {
+                        fig.add(new CKEDITOR.htmlParser.element('figcaption'), 1);
                     }
 
-                    el.children = el.children.slice(0, 2);
+                    fig.children = fig.children.slice(0, 2);
 
-                    return el;
+                    return fig;
                 },
                 downcast: function (el) {
                     // Quote
