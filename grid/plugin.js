@@ -46,7 +46,7 @@
                 downcast: function (el) {
                     var dom = this.editables.content.$;
                     Array.prototype.forEach.call(dom.children, function (item) {
-                        if (!isWidget(item)) {
+                        if (!getWidgetElement(item)) {
                             item.parentElement.removeChild(item);
                         }
                     });
@@ -76,25 +76,25 @@
     });
 
     /**
-     * Indicates if given HTML element is the widget element or wrapper of another widget
+     * Returns the widget element if given element another block widget's element or wrapper or null otherwise
      *
      * @param {HTMLElement} el
      *
-     * @return {Boolean}
+     * @return {HTMLElement|null}
      */
-    function isWidget(el) {
+    function getWidgetElement(el) {
         if (!(el instanceof HTMLElement)) {
-            return false;
+            return null;
         }
 
-        if (el.hasAttribute('data-widget')) {
-            return el.getAttribute('data-widget') !== 'grid';
+        if (el.tagName.toLowerCase() === 'div' && el.hasAttribute('data-cke-widget-wrapper') && el.firstElementChild instanceof HTMLElement) {
+            el = el.firstElementChild;
         }
 
-        if (el.hasAttribute('data-cke-widget-wrapper') && el.firstElementChild instanceof HTMLElement) {
-            return el.firstElementChild.hasAttribute('data-widget') && el.firstElementChild.getAttribute('data-widget') !== 'grid';
+        if (el.hasAttribute('data-widget') && el.getAttribute('data-widget') !== 'grid') {
+            return el;
         }
 
-        return false;
+        return null;
     }
 })(CKEDITOR);
