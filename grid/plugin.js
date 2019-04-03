@@ -46,7 +46,9 @@
                 downcast: function (el) {
                     var dom = this.editables.content.$;
                     Array.prototype.forEach.call(dom.children, function (item) {
-                        if (!getWidgetElement(item)) {
+                        var name = getWidgetName(item);
+
+                        if (!name || name === 'grid') {
                             item.parentElement.removeChild(item);
                         }
                     });
@@ -76,23 +78,23 @@
     });
 
     /**
-     * Returns the widget element if given element another block widget's element or wrapper or null otherwise
+     * Returns the widget name if given element is a widget element or wrapper or null otherwise
      *
      * @param {HTMLElement} el
      *
-     * @return {HTMLElement|null}
+     * @return {String|null}
      */
-    function getWidgetElement(el) {
+    function getWidgetName(el) {
         if (!(el instanceof HTMLElement)) {
             return null;
         }
 
-        if (el.tagName.toLowerCase() === 'div' && el.hasAttribute('data-cke-widget-wrapper') && el.firstElementChild instanceof HTMLElement) {
-            el = el.firstElementChild;
+        if (el.hasAttribute('data-widget')) {
+            return el.getAttribute('data-widget') || null;
         }
 
-        if (el.hasAttribute('data-widget') && el.getAttribute('data-widget') !== 'grid') {
-            return el;
+        if (el.tagName.toLowerCase() === 'div' && el.hasAttribute('data-cke-widget-wrapper') && el.firstElementChild instanceof HTMLElement) {
+            return el.firstElementChild.getAttribute('data-widget') || null;
         }
 
         return null;
