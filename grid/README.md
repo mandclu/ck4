@@ -8,6 +8,10 @@ The resulting HTML will be
         ...
     </div>
 
+## Note
+
+This widget will only allow other widgets as child elements. The filtering now takes place on `downcast`.
+
 ## Demo
 
 https://akilli.github.io/rte/ck4
