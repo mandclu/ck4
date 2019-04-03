@@ -212,7 +212,7 @@
              * @return {Boolean}
              */
             removable: function (el) {
-                return !!el && !CKEDITOR.dtd.$empty[el.name] && !el.getHtml().trim();
+                return !!el && (el.type !== CKEDITOR.NODE_ELEMENT || !CKEDITOR.dtd.$empty[el.name] && !el.getHtml().trim());
             },
 
             /**
