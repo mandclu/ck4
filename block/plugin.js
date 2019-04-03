@@ -89,7 +89,7 @@
             var dialog = this.getDialog();
             this.getInputElement().$.addEventListener('change', function () {
                 var content = get(ev.editor.config.blockApi, this.value);
-                dialog.getContentElement('general', 'content').setValue(content);
+                dialog.getContentElement('info', 'content').setValue(content);
             });
         };
 
@@ -103,7 +103,7 @@
                 if (!!data.id) {
                     var dialog = this.getDialog();
                     ['id', 'content'].forEach(function (item) {
-                        dialog.getContentElement('general', item).setValue(data[item] || '');
+                        dialog.getContentElement('info', item).setValue(data[item] || '');
                     });
                 }
             };

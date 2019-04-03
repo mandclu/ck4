@@ -6,6 +6,7 @@
         audio: 'Audio',
         iframe: 'Iframe',
         image: 'Bild',
+        info: 'Info',
         link: 'Link',
         title: 'Media - Bild, Audio, Video, Iframe',
         type: 'Typ',

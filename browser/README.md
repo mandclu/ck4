@@ -27,7 +27,7 @@ To use the provided API in your plugin, you just have to define a callback funct
 
                 ['src', 'type', 'alt'].forEach(function (item) {
                     if (!!data[item]) {
-                        dialog.getContentElement('general', item).setValue(data[item]);
+                        dialog.getContentElement('info', item).setValue(data[item]);
                     }
                 });
             }
