@@ -7,10 +7,6 @@ The resulting HTML will be
     <div class="grid">
         ...
     </div>
-    
-## Note
-
-Currently only *figure*, *section* and [*block*](https://ckeditor.com/cke4/addon/block) elements are allowed as child elements. This artificial limitation will be removed in one of the next versions.
 
 ## Demo
 
