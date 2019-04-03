@@ -13,7 +13,7 @@
             contents: [
                 {
                     id: 'info',
-                    label: lang.info,
+                    label: common.generalTab,
                     elements: [
                         {
                             id: 'type',

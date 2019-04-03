@@ -6,7 +6,6 @@
         audio: 'Аудіо',
         iframe: 'Iframe',
         image: 'Картинка',
-        info: 'Інфо',
         link: 'Посилання',
         title: 'Медія - Картинка, Аудіо, Відео, Iframe',
         type: 'Тип',
