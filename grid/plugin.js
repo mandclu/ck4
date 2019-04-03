@@ -64,8 +64,6 @@
                         dom.appendChild(p);
                     }
 
-                    console.log(dom);
-
                     return el.children.length > 0 ? el : new CKEDITOR.htmlParser.text('');
                 }
             });
