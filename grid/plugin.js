@@ -46,6 +46,10 @@
                     content.children = el.children.slice(1);
                     el.children = el.children.slice(0, 1);
 
+                    if (content.children.length < 1 || content.children[content.children.length - 1].name !== 'p') {
+                        content.add(new CKEDITOR.htmlParser.element('p'));
+                    }
+
                     return el;
                 },
                 downcast: function (el) {
