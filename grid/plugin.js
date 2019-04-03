@@ -46,7 +46,7 @@
                 downcast: function (el) {
                     var dom = this.editables.content.$;
                     Array.prototype.forEach.call(dom.children, function (item) {
-                        if (!item.hasAttribute('data-cke-widget-wrapper') && !item.hasAttribute('data-widget')) {
+                        if (!isWidget(item)) {
                             item.parentElement.removeChild(item);
                         }
                     });
@@ -74,4 +74,27 @@
             editor.addContentsCss(this.path + 'styles/grid.css');
         }
     });
+
+    /**
+     * Indicates if given HTML element is the widget element or wrapper of another widget
+     *
+     * @param {HTMLElement} el
+     *
+     * @return {Boolean}
+     */
+    function isWidget(el) {
+        if (!(el instanceof HTMLElement)) {
+            return false;
+        }
+
+        if (el.hasAttribute('data-widget')) {
+            return el.getAttribute('data-widget') !== 'grid';
+        }
+
+        if (el.hasAttribute('data-cke-widget-wrapper') && el.firstElementChild instanceof HTMLElement) {
+            return el.firstElementChild.hasAttribute('data-widget') && el.firstElementChild.getAttribute('data-widget') !== 'grid';
+        }
+
+        return false;
+    }
 })(CKEDITOR);
