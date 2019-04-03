@@ -5,7 +5,7 @@
      * Plugin
      */
     CKEDITOR.plugins.add('grid', {
-        requires: 'api,widget',
+        requires: 'widget',
         icons: 'grid',
         hidpi: true,
         lang: 'de,en',
@@ -18,16 +18,7 @@
                 template: '<div class="grid"><div class="content"></div></div>',
                 editables: {
                     content: {
-                        selector: '.content',
-                        allowedContent: {
-                            block: {
-                                attributes: {id: true},
-                                requiredAttributes: {id: true}
-                            },
-                            figure: true,
-                            p: true,
-                            section: true
-                        }
+                        selector: '.content'
                     }
                 },
                 allowedContent: {
@@ -53,13 +44,27 @@
                     return el;
                 },
                 downcast: function (el) {
+                    var dom = this.editables.content.$;
+                    Array.prototype.forEach.call(dom.children, function (item) {
+                        if (!item.hasAttribute('data-cke-widget-wrapper') && !item.hasAttribute('data-widget')) {
+                            item.parentElement.removeChild(item);
+                        }
+                    });
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
                         if (item.name !== 'p') {
-                            CKEDITOR.api.parser.add(item, el);
+                            el.add(item);
                         }
                     });
                     el.children[0].remove();
+
+                    if (dom.children.length < 1 || dom.lastElementChild.tagName.toLowerCase() !== 'p') {
+                        var p = dom.ownerDocument.createElement('p');
+                        p.appendChild(dom.ownerDocument.createElement('br'));
+                        dom.appendChild(p);
+                    }
+
+                    console.log(dom);
 
                     return el.children.length > 0 ? el : new CKEDITOR.htmlParser.text('');
                 }
