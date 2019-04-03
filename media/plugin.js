@@ -239,7 +239,7 @@
                 type = CKEDITOR.api.media.fromUrl(this.getValue()) || '';
             }
 
-            this.getDialog().getContentElement('info', 'type').setValue(type);
+            this.getDialog().getContentElement('general', 'type').setValue(type);
         };
 
         /**
@@ -252,7 +252,7 @@
 
                 ['src', 'type', 'alt', 'width', 'height'].forEach(function (item) {
                     if (!!data[item]) {
-                        dialog.getContentElement('info', item).setValue(data[item]);
+                        dialog.getContentElement('general', item).setValue(data[item]);
                     }
                 });
             }
