@@ -27,7 +27,7 @@
                         allowedContent: {}
                     },
                     content: {
-                        selector: '.content'
+                        selector: 'div.content'
                     }
                 },
                 allowedContent: {details: true, summary: true},

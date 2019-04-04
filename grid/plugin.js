@@ -18,7 +18,7 @@
                 template: '<div class="grid"><div class="content"></div></div>',
                 editables: {
                     content: {
-                        selector: '.content'
+                        selector: 'div.content'
                     }
                 },
                 allowedContent: {
