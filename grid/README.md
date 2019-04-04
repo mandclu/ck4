@@ -8,7 +8,7 @@ The resulting HTML will be
         ...
     </div>
 
-## Note
+## Technical
 
 This widget will only allow other widgets as child elements. The filtering now takes place on `downcast`.
 
