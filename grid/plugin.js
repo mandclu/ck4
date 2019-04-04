@@ -45,6 +45,7 @@
                 },
                 downcast: function (el) {
                     var dom = this.editables.content.$;
+
                     Array.prototype.forEach.call(dom.children, function (item) {
                         var name = getName(item);
 

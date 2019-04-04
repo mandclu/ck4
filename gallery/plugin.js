@@ -59,11 +59,11 @@
                         caption = new CKEDITOR.htmlParser.element('figcaption');
                     }
 
-                    el.add(caption, 1);
+                    el.add(caption, 0);
 
                     // Content
                     var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
-                    el.add(content, 1);
+                    el.add(content, 0);
                     content.children = el.children.slice(2);
                     el.children = el.children.slice(0, 2);
 
@@ -74,7 +74,9 @@
                     return el;
                 },
                 downcast: function (el) {
+                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
                     var dom = this.editables.content.$;
+
                     Array.prototype.forEach.call(dom.children, function (item) {
                         var name = getName(item);
 
@@ -84,10 +86,11 @@
                     });
                     el.children[0].setHtml(this.editables.content.getData());
                     el.children[0].children.forEach(function (item) {
-                        if (item.name === 'p') {
-                            item.remove();
+                        if (item.name !== 'p') {
+                            content.add(item);
                         }
                     });
+                    el.children[0].replaceWith(content);
 
                     if (!el.children[0].getHtml().trim()) {
                         return new CKEDITOR.htmlParser.text('');
