@@ -2,7 +2,7 @@
 
 This widgets serves as a container for multiple media elements in order to display them as a gallery, p.e. with the aid of flexbox or grid layout, or as a slider/carousel, p.e. with your own implementation or one of your choice, or as whatever else comes into your mind.
 
-**This widget itself does not provide any slider/carousel functionality!** It only provides a HTML structure suitable for aforementioned purposes and allows to maintain it with the editor.
+**This widget itself does not provide any slider/carousel functionality!** It only provides a HTML structure suitable for aforementioned purposes and allows to maintain it within the editor.
 
 The resulting HTML will be p.e.
 
