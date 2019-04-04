@@ -1,6 +1,6 @@
 # Block Widget
 
-This widget let's you create and edit non-editable and optionally previewable placeholder blocks. 
+This widget lets you create and edit non-editable and optionally previewable placeholder blocks. 
 
 You can edit the placeholder block through a simple dialog where you can enter the ID of the block into a text input field. How you use the ID-field is completely up to you. Whatever makes sense for you or rather your application is fine. 
 
