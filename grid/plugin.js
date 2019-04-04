@@ -46,7 +46,7 @@
                 downcast: function (el) {
                     var dom = this.editables.content.$;
                     Array.prototype.forEach.call(dom.children, function (item) {
-                        var name = getWidgetName(item);
+                        var name = getName(item);
 
                         if (!name || name === 'grid') {
                             item.parentElement.removeChild(item);
@@ -80,23 +80,41 @@
     /**
      * Returns the widget name if given element is a widget element or wrapper or null otherwise
      *
-     * @param {HTMLElement} el
+     * @param {Element} el
      *
      * @return {String|null}
      */
-    function getWidgetName(el) {
-        if (!(el instanceof HTMLElement)) {
-            return null;
-        }
-
-        if (el.hasAttribute('data-widget')) {
+    function getName(el) {
+        if (isElement(el)) {
             return el.getAttribute('data-widget') || null;
         }
 
-        if (el.tagName.toLowerCase() === 'div' && el.hasAttribute('data-cke-widget-wrapper') && el.firstElementChild instanceof HTMLElement) {
+        if (isWrapper(el) && isElement(el.firstElementChild)) {
             return el.firstElementChild.getAttribute('data-widget') || null;
         }
 
         return null;
+    }
+
+    /**
+     * Indicates if given HTML element is a figure widget element
+     *
+     * @param {Element} el
+     *
+     * @return {Boolean}
+     */
+    function isElement(el) {
+        return el instanceof HTMLElement && el.hasAttribute('data-widget');
+    }
+
+    /**
+     * Indicates if given HTML element is a figure widget wrapper
+     *
+     * @param {Element} el
+     *
+     * @return {Boolean}
+     */
+    function isWrapper(el) {
+        return el instanceof HTMLElement && el.tagName.toLowerCase() === 'div' && el.hasAttribute('data-cke-widget-wrapper');
     }
 })(CKEDITOR);
