@@ -70,11 +70,14 @@
                     return el.children.length > 0 ? el : new CKEDITOR.htmlParser.text('');
                 }
             });
-
-            /**
-             * Styles
-             */
-            editor.addContentsCss(this.path + 'styles/grid.css');
+        },
+        onLoad: function () {
+            CKEDITOR.addCss(
+                'div.grid {line-height: 1.5rem;padding: 0.75rem;}' +
+                'div.grid > div.content {display: flex;flex-wrap: wrap;justify-content: space-between;}' +
+                'div.grid > div.content > * {width: calc(50% - 0.75rem);margin-bottom: 1.5rem;border: 0.0625rem dotted #ddd;}' +
+                'div.grid .cke_widget_editable {outline: none !important;}'
+            );
         }
     });
 

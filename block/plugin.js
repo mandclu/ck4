@@ -65,11 +65,12 @@
              * Dialog
              */
             CKEDITOR.dialog.add('block', this.path + 'dialogs/block.js');
-
-            /**
-             * Styles
-             */
-            editor.addContentsCss(this.path + 'styles/block.css');
+        },
+        onLoad: function () {
+            CKEDITOR.addCss(
+                'div[data-block]:empty {line-height: 6rem;text-align: center;background: #ffa500;}'+
+                'div[data-block]:empty::after {content: "Block-ID: " attr(data-block) " ";}'
+            );
         }
     });
 
