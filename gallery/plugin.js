@@ -62,14 +62,21 @@
                     el.add(caption, 0);
 
                     // Content
-                    var content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
-                    el.add(content, 0);
-                    content.children = el.children.slice(2);
-                    el.children = el.children.slice(0, 2);
+                    var content;
+
+                    if (el.children.length >= 2 && el.children[1].name === 'div' && el.children[1].hasClass('content')) {
+                        content = el.children[1];
+                    } else {
+                        content = new CKEDITOR.htmlParser.element('div', {'class': 'content'});
+                        content.children = el.children.slice(2);
+                    }
 
                     if (content.children.length < 1 || content.children[content.children.length - 1].name !== 'p') {
                         content.add(new CKEDITOR.htmlParser.element('p'));
                     }
+
+                    el.add(content, 0);
+                    el.children = el.children.slice(0, 2);
 
                     return el;
                 },
