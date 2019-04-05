@@ -1,3 +1,8 @@
+/**
+ * Browser Plugin
+ *
+ * @author Ayhan Akilli
+ */
 'use strict';
 
 /**

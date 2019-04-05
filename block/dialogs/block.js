@@ -1,3 +1,8 @@
+/**
+ * Block Dialog
+ *
+ * @author Ayhan Akilli
+ */
 'use strict';
 
 (function (CKEDITOR) {

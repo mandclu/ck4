@@ -1,3 +1,8 @@
+/**
+ * Media Widget
+ *
+ * @author Ayhan Akilli
+ */
 'use strict';
 
 (function (window, document, CKEDITOR) {

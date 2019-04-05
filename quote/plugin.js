@@ -1,3 +1,8 @@
+/**
+ * Quote Widget
+ *
+ * @author Ayhan Akilli
+ */
 'use strict';
 
 (function (CKEDITOR) {
