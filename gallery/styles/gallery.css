@@ -6,13 +6,27 @@ figure.gallery {
 figure.gallery > div.content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 figure.gallery > div.content > * {
-    width: calc(50% - 0.75rem);
-    margin-bottom: 1.5rem;
+    width: calc(25% - 1.125rem);
+    margin: 0 0 1.5rem 1.5rem;
     border: 0.0625rem dotted #ddd;
+}
+
+figure.gallery > div.content > :nth-child(4n+1) {
+    margin-left: 0;
+}
+
+figure.gallery iframe,
+figure.gallery img,
+figure.gallery video {
+    max-height: 10.5rem;
+}
+
+figure.gallery img {
+    object-fit: cover;
+    object-position: center;
 }
 
 figure.gallery figcaption {
