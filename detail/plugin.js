@@ -25,7 +25,7 @@
              */
             editor.widgets.add('detail', {
                 button: editor.lang.detail.title,
-                template: '<details><summary></summary><div class="content"></div></details>',
+                template: '<details><summary>' + editor.lang.detail.title +'</summary><div class="content"></div></details>',
                 editables: {
                     summary: {
                         selector: 'summary',
@@ -78,6 +78,11 @@
                 init: function () {
                     var summary = this.element.getChild(0);
 
+                    summary.on('blur', function () {
+                        if (!summary.getText().trim()) {
+                            summary.setText(editor.lang.detail.title);
+                        }
+                    });
                     summary.on('keyup', function (ev) {
                         if (ev.data['$'].key === ' ' || ev.data['$'].keyCode === 32) {
                             ev.data['$'].preventDefault();
